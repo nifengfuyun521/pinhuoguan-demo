@@ -32,7 +32,7 @@ export function DinnerEvent({ onBack }: DinnerEventProps) {
         <button onClick={onBack} className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 transition-colors">
           <ArrowLeft size={20} className="text-stone-300" />
         </button>
-        <span className="text-sm font-serif tracking-widest text-stone-200">品鉴晚宴</span>
+        <span className="text-sm font-serif tracking-widest text-stone-200">六月品宴</span>
         <button className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 transition-colors">
           <Share2 size={18} className="text-stone-300" />
         </button>
@@ -53,10 +53,10 @@ export function DinnerEvent({ onBack }: DinnerEventProps) {
             transition={{ delay: 0.2 }}
           >
             <span className="px-2 py-1 bg-amber-600/20 border border-amber-500/30 text-amber-400 text-[10px] tracking-widest uppercase rounded mb-3 inline-block">
-              Exclusive Event
+              Member Dinner
             </span>
-            <h1 className="text-3xl font-serif text-white mb-2">至臻 · 东方意蕴</h1>
-            <p className="text-stone-400 text-sm tracking-wide">品货官首届高定生活私享晚宴</p>
+            <h1 className="text-3xl font-serif text-white mb-2">六月品宴 · 一席一会</h1>
+            <p className="text-stone-400 text-sm tracking-wide">山隐私厨会员专场 · 余 8 席</p>
           </motion.div>
         </div>
       </div>
@@ -100,14 +100,14 @@ export function DinnerEvent({ onBack }: DinnerEventProps) {
                 <h2 className="text-xl font-serif text-amber-100 mb-6">诚挚邀约</h2>
                 <p className="text-stone-300 text-sm leading-loose mb-8 font-light">
                   尊敬的会员：<br/><br/>
-                  在这个快节奏的时代，我们诚邀您放慢脚步，共赴一场关于美学与生活的对话。
-                  这将不仅是一次晚宴，更是一次心灵的归位。
+                  这个周六，我们在山隐私厨留下一席。以时令食材入席，
+                  也以家人、礼物与生活美学为话题，慢慢吃一顿真正放松的饭。
                 </p>
                 
                 <div className="space-y-4 mb-8">
                   <div className="flex items-center justify-center space-x-3 text-stone-400">
                     <Calendar size={16} />
-                    <span className="text-sm">2025年12月24日</span>
+                    <span className="text-sm">2026年6月27日</span>
                   </div>
                   <div className="flex items-center justify-center space-x-3 text-stone-400">
                     <Clock size={16} />
@@ -115,7 +115,7 @@ export function DinnerEvent({ onBack }: DinnerEventProps) {
                   </div>
                   <div className="flex items-center justify-center space-x-3 text-stone-400">
                     <MapPin size={16} />
-                    <span className="text-sm">上海 · 养云安缦</span>
+                    <span className="text-sm">上海 · 山隐私厨</span>
                   </div>
                 </div>
 

@@ -181,7 +181,7 @@ const reviewNotes = [
 
 const galleryImages = [
   { url: "https://images.unsplash.com/photo-1559484379-68a6d9c90c73?q=80&w=800&auto=format&fit=crop", caption: "茶室一角" },
-  { url: "https://images.unsplash.com/photo-1626994542321-a83f102c17c8?q=80&w=800&auto=format&fit=crop", caption: "工作区" },
+  { url: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=800&auto=format&fit=crop", caption: "工作区" },
   { url: "https://images.unsplash.com/photo-1584428885051-d80a38d86b39?q=80&w=800&auto=format&fit=crop", caption: "展品区" },
   { url: "https://images.unsplash.com/photo-1752862793633-43933bf06825?q=80&w=800&auto=format&fit=crop", caption: "茶席" },
   { url: "https://images.unsplash.com/photo-1680210963123-cc25aafa7a47?q=80&w=800&auto=format&fit=crop", caption: "柴窑" },
@@ -584,7 +584,7 @@ export function StoreProfileView({ store, onBack, onMasterClick, onNoteClick }: 
               </div>
               <div className="flex space-x-3 overflow-x-auto pb-2 -mx-1 px-1 scrollbar-hide">
                 {[
-                  { img: "https://images.unsplash.com/photo-1626994542321-a83f102c17c8?q=80&w=400&auto=format&fit=crop", text: "今天的拉胚" },
+                  { img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=400&auto=format&fit=crop", text: "今天的拉胚" },
                   { img: "https://images.unsplash.com/photo-1680210963123-cc25aafa7a47?q=80&w=400&auto=format&fit=crop", text: "准备装窑" },
                   { img: "https://images.unsplash.com/photo-1584428885051-d80a38d86b39?q=80&w=400&auto=format&fit=crop", text: "新壶出窑" },
                   { img: "https://images.unsplash.com/photo-1752862793633-43933bf06825?q=80&w=400&auto=format&fit=crop", text: "今日茶席" }

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { MessageSquare, Heart, ThumbsUp, User, Sparkles, Plus, Clock, Share2, BookOpen, ShieldCheck, Users, Target, ArrowRight, Leaf, Award, BookMarked, Camera, Star, ChevronRight, MapPin, Search } from 'lucide-react';
+import { MessageSquare, Heart, ThumbsUp, User, Sparkles, Plus, Clock, Share2, BookOpen, ShieldCheck, Users, Target, ArrowLeft, ArrowRight, Leaf, Award, BookMarked, Camera, Star, ChevronRight, MapPin, Search, Radio, PlayCircle } from 'lucide-react';
 import { toast } from 'sonner';
-import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { MasterNoteDetail } from './MasterNoteDetail';
 import { MasterProfileView } from './MasterProfileView';
 import { ReviewNoteDetail } from './ReviewNoteDetail';
+import { StoreProfileView } from './StoreProfileView';
 
 const mastersData: Record<string, {
   id: string;
@@ -66,6 +66,40 @@ const mastersData: Record<string, {
     notesCount: 6,
     followersCount: 3102,
     isFollowed: false
+  }
+};
+
+const storesData: Record<string, {
+  id: string;
+  name: string;
+  type: string;
+  image: string;
+  location: string;
+  masterId: string;
+}> = {
+  qingshan: {
+    id: 'qingshan',
+    name: '清山茶事',
+    type: '茶空间',
+    image: 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
+    location: '杭州市西湖区龙井路 88 号',
+    masterId: 'qingshan'
+  },
+  maixiang: {
+    id: 'maixiang',
+    name: '麦乡面包坊',
+    type: '手作烘焙',
+    image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
+    location: '上海市静安区愚园路 321 号',
+    masterId: 'maixiang'
+  },
+  feifa: {
+    id: 'feifa',
+    name: '飞发舍',
+    type: '美业护理',
+    image: 'https://images.unsplash.com/photo-1622286342621-4bd786c2447c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
+    location: '北京市朝阳区三里屯北街 42 号',
+    masterId: 'feifa'
   }
 };
 
@@ -355,42 +389,265 @@ const betaTests = [
   }
 ];
 
-const lifeNotes = [
-  {
-    id: 1,
-    title: "午后的静谧时光",
-    image: "https://images.unsplash.com/photo-1678092936199-eb64396aa37a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600",
-    author: { name: "Lin", avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=60" },
-    likes: 128
-  },
-  {
-    id: 2,
-    title: "米其林三星的艺术",
-    image: "https://images.unsplash.com/photo-1750943024048-a4c9912b1425?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600",
-    author: { name: "Chef Wang", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=60" },
-    likes: 245
-  },
-  {
-    id: 3,
-    title: "当代艺术展打卡",
-    image: "https://images.unsplash.com/photo-1723974591057-ccadada1f283?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600",
-    author: { name: "Artist J", avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=60" },
-    likes: 56
-  },
-  {
-    id: 4,
-    title: "居家美学",
-    image: "https://images.unsplash.com/photo-1669387448840-610c588f003d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600",
-    author: { name: "Design Pro", avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=60" },
-    likes: 892
-  }
-];
+function SectionIntro({
+  icon: Icon,
+  title,
+  subtitle,
+  action,
+  onAction,
+}: {
+  icon: React.ElementType;
+  title: string;
+  subtitle: string;
+  action?: string;
+  onAction?: () => void;
+}) {
+  return (
+    <div className="mb-5 rounded-xl border border-stone-100 bg-white p-3.5 shadow-sm">
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex min-w-0 items-center space-x-3">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-stone-900 text-amber-100">
+            <Icon size={15} />
+          </div>
+          <div className="min-w-0">
+            <div className="flex items-center space-x-2">
+              <span className="h-1.5 w-1.5 rounded-full bg-amber-600" />
+              <h3 className="text-sm font-bold leading-tight text-stone-900">{title}</h3>
+            </div>
+            <p className="mt-1 text-[10px] leading-relaxed text-stone-500">{subtitle}</p>
+          </div>
+        </div>
+        {action && (
+          <button
+            onClick={onAction}
+            className="shrink-0 rounded-full border border-stone-200 bg-stone-50 px-3 py-1.5 text-[10px] font-medium text-stone-700"
+          >
+            {action}
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function CommunityHeaderBar({ title, onBack }: { title: string; onBack: () => void }) {
+  return (
+    <div className="sticky top-0 z-40 border-b border-stone-200 bg-stone-50/95 backdrop-blur-md">
+      <div className="flex h-14 items-center justify-between px-4">
+        <button
+          aria-label="返回圈层"
+          onClick={onBack}
+          className="flex h-10 w-10 items-center justify-center rounded-full text-stone-700 hover:bg-stone-100"
+        >
+          <ArrowLeft size={20} />
+        </button>
+        <span className="font-serif text-sm font-medium text-stone-900">{title}</span>
+        <div className="w-10" />
+      </div>
+    </div>
+  );
+}
+
+function MasterCollectionPage({
+  onBack,
+  onNoteClick,
+  onMasterClick,
+}: {
+  onBack: () => void;
+  onNoteClick: (note: typeof masterNotes[0]) => void;
+  onMasterClick: (masterId: string) => void;
+}) {
+  return (
+    <div className="min-h-screen bg-stone-50 pb-24 text-stone-900">
+      <CommunityHeaderBar title="本周推荐主理人" onBack={onBack} />
+      <div className="p-6 space-y-5">
+        <div className="rounded-2xl bg-stone-900 p-5 text-amber-50">
+          <p className="text-[10px] uppercase tracking-widest text-amber-300">Curated Masters</p>
+          <h1 className="mt-2 font-serif text-2xl leading-snug">三位用心做事的人</h1>
+          <p className="mt-2 text-xs leading-relaxed text-stone-300">从器物、食物到服务，把好店背后的人先讲清楚。</p>
+        </div>
+
+        {masterNotes.map((note) => (
+          <button
+            key={note.id}
+            onClick={() => onNoteClick(note)}
+            className="w-full overflow-hidden rounded-2xl border border-stone-100 bg-white text-left shadow-sm"
+          >
+            <div className="relative h-40 overflow-hidden">
+              <img src={note.cover} alt={note.title} className="h-full w-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-stone-950/70 to-transparent" />
+              <div className="absolute bottom-4 left-4 right-4 text-white">
+                <p className="text-[10px] text-amber-300">{note.master.title} · {note.master.storeName}</p>
+                <h2 className="mt-1 font-serif text-lg leading-snug">{note.title}</h2>
+              </div>
+            </div>
+            <div className="p-4">
+              <div
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onMasterClick(note.master.storeId);
+                }}
+                className="mb-3 flex items-center"
+              >
+                <img src={note.master.avatar} alt={note.master.name} className="mr-2 h-8 w-8 rounded-full object-cover" />
+                <div>
+                  <p className="text-xs font-bold text-stone-900">{note.master.name}</p>
+                  <p className="text-[10px] text-stone-400">{note.master.storeName}</p>
+                </div>
+              </div>
+              <p className="text-xs leading-relaxed text-stone-500 line-clamp-2">{note.excerpt}</p>
+            </div>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ReviewCollectionPage({
+  onBack,
+  onReviewClick,
+}: {
+  onBack: () => void;
+  onReviewClick: (reviewId: number) => void;
+}) {
+  return (
+    <div className="min-h-screen bg-stone-50 pb-24 text-stone-900">
+      <CommunityHeaderBar title="品鉴官精选测评" onBack={onBack} />
+      <div className="p-6 space-y-5">
+        <div className="rounded-2xl border border-amber-100 bg-amber-50 p-5">
+          <p className="text-[10px] uppercase tracking-widest text-amber-700">Trusted Reviews</p>
+          <h1 className="mt-2 font-serif text-2xl leading-snug">把真实体验说透</h1>
+          <p className="mt-2 text-xs leading-relaxed text-amber-950/75">围绕产品、门店和服务，给出可参考的体验结论。</p>
+        </div>
+
+        {reviewNotes.map((note) => (
+          <button
+            key={note.id}
+            onClick={() => onReviewClick(note.id)}
+            className="w-full rounded-2xl border border-stone-100 bg-white p-4 text-left shadow-sm"
+          >
+            <div className="mb-3 flex items-center justify-between">
+              <div className="flex items-center">
+                <img src={note.connoisseur.avatar} alt={note.connoisseur.name} className="mr-2 h-8 w-8 rounded-full object-cover" />
+                <div>
+                  <p className="text-xs font-bold text-stone-900">{note.connoisseur.name}</p>
+                  <p className="text-[10px] text-stone-400">{note.connoisseur.title}</p>
+                </div>
+              </div>
+              <span className="rounded-full bg-amber-50 px-2 py-1 text-[10px] text-amber-700 ring-1 ring-amber-100">{note.overallScore}分</span>
+            </div>
+            <div className="flex gap-3">
+              <img src={note.cover} alt={note.title} className="h-24 w-24 shrink-0 rounded-xl object-cover" />
+              <div className="min-w-0">
+                <h2 className="font-serif text-base leading-snug text-stone-900 line-clamp-2">{note.title}</h2>
+                <p className="mt-2 text-xs leading-relaxed text-stone-500 line-clamp-2">{note.excerpt}</p>
+                <p className="mt-2 text-[10px] text-stone-400">{note.usefulCount} 人觉得有用</p>
+              </div>
+            </div>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function KnowledgeCollectionPage({
+  onBack,
+  onArticleClick,
+}: {
+  onBack: () => void;
+  onArticleClick: (article: typeof knowledgeArticles[0]) => void;
+}) {
+  return (
+    <div className="min-h-screen bg-stone-50 pb-24 text-stone-900">
+      <CommunityHeaderBar title="本周真知" onBack={onBack} />
+      <div className="p-6 space-y-5">
+        <div className="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-stone-100">
+          <p className="text-[10px] uppercase tracking-widest text-amber-700">Knowledge Focus</p>
+          <h1 className="mt-2 font-serif text-2xl leading-snug">本周重点关注</h1>
+          <p className="mt-2 text-xs leading-relaxed text-stone-500">把生活方式、空间能量、审美资产和健康知识做成可阅读的专题。</p>
+        </div>
+
+        {knowledgeArticles.map((article) => (
+          <button
+            key={article.id}
+            onClick={() => onArticleClick(article)}
+            className="w-full overflow-hidden rounded-2xl border border-stone-100 bg-white text-left shadow-sm"
+          >
+            <div className="relative h-36 overflow-hidden">
+              <img src={article.image} alt={article.title} className="h-full w-full object-cover" />
+              <div className="absolute left-3 top-3 rounded-full bg-white/90 px-2 py-1 text-[10px] text-stone-700">{article.type}</div>
+            </div>
+            <div className="p-4">
+              <div className="mb-3 flex items-center">
+                <img src={article.author.avatar} alt={article.author.name} className="mr-2 h-7 w-7 rounded-full object-cover" />
+                <div>
+                  <p className="text-xs font-bold text-stone-900">{article.author.name}</p>
+                  <p className="text-[10px] text-stone-400">{article.author.title}</p>
+                </div>
+              </div>
+              <h2 className="font-serif text-lg leading-snug text-stone-900">{article.title}</h2>
+              <p className="mt-2 text-xs leading-relaxed text-stone-500 line-clamp-2">{article.excerpt}</p>
+              <p className="mt-3 text-[10px] text-stone-400">{article.readTime} · 真知认证</p>
+            </div>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function KnowledgeArticlePage({
+  article,
+  onBack,
+}: {
+  article: typeof knowledgeArticles[0];
+  onBack: () => void;
+}) {
+  return (
+    <div className="min-h-screen bg-stone-50 pb-24 text-stone-900">
+      <CommunityHeaderBar title="真知详情" onBack={onBack} />
+      <div className="space-y-6">
+        <div className="relative h-64 overflow-hidden">
+          <img src={article.image} alt={article.title} className="h-full w-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-stone-950/80 to-transparent" />
+          <div className="absolute bottom-6 left-6 right-6 text-white">
+            <span className="rounded-full bg-white/20 px-2.5 py-1 text-[10px] text-amber-100 ring-1 ring-white/20">{article.type}</span>
+            <h1 className="mt-3 font-serif text-2xl leading-snug">{article.title}</h1>
+          </div>
+        </div>
+        <div className="px-6">
+          <div className="mb-5 flex items-center">
+            <img src={article.author.avatar} alt={article.author.name} className="mr-3 h-10 w-10 rounded-full object-cover" />
+            <div>
+              <p className="text-sm font-bold text-stone-900">{article.author.name}</p>
+              <p className="text-[10px] text-stone-400">{article.author.title} · {article.readTime}</p>
+            </div>
+          </div>
+          <div className="rounded-2xl border border-stone-100 bg-white p-5 shadow-sm">
+            <p className="text-sm leading-7 text-stone-600">{article.excerpt}</p>
+            <p className="mt-4 text-sm leading-7 text-stone-600">
+              本专题从真实场景出发，拆解空间、器物、身体与家庭生活之间的关系。平台会持续邀请专业人士补充方法论，让用户在消费前先建立判断力。
+            </p>
+            <p className="mt-4 text-sm leading-7 text-stone-600">
+              后续可承接到商品、门店、活动与圈层讨论，让知识不只停留在阅读，而是成为更稳妥的生活选择。
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export function CommunityView() {
-  const [activeTab, setActiveTab] = useState<'master' | 'review' | 'knowledge' | 'circles' | 'notes'>('master');
+  const [activeTab, setActiveTab] = useState<'master' | 'review' | 'knowledge' | 'live' | 'circles'>('master');
   const [selectedNote, setSelectedNote] = useState<typeof masterNotes[0] | null>(null);
   const [selectedReview, setSelectedReview] = useState<typeof reviewNotes[0] | null>(null);
+  const [selectedKnowledge, setSelectedKnowledge] = useState<typeof knowledgeArticles[0] | null>(null);
   const [selectedMaster, setSelectedMaster] = useState<typeof mastersData[keyof typeof mastersData] | null>(null);
+  const [selectedStore, setSelectedStore] = useState<typeof storesData[keyof typeof storesData] | null>(null);
+  const [subPage, setSubPage] = useState<'masters' | 'reviews' | 'knowledge' | null>(null);
   const [previousView, setPreviousView] = useState<'list' | 'note'>('list');
 
   const handleShare = (title: string) => {
@@ -400,6 +657,15 @@ export function CommunityView() {
            <span className="text-xs text-stone-500">包含您的专家见解与"{title}"，可保存分享</span>
         </div>
      );
+  };
+
+  const handlePublish = () => {
+    toast.success(
+      <div className="flex flex-col">
+        <span className="font-serif font-medium">发布入口已打开</span>
+        <span className="text-xs text-stone-500">可发布品鉴测评、主理人提问或圈层话题</span>
+      </div>
+    );
   };
 
   const handleMasterClick = (masterId: string) => {
@@ -428,6 +694,34 @@ export function CommunityView() {
     }
   };
 
+  const handleStoreClick = (storeId: string) => {
+    const store = storesData[storeId];
+    if (store) {
+      setSelectedStore(store);
+    } else {
+      toast.info('店铺页面准备中');
+    }
+  };
+
+  if (selectedKnowledge) {
+    return (
+      <KnowledgeArticlePage
+        article={selectedKnowledge}
+        onBack={() => setSelectedKnowledge(null)}
+      />
+    );
+  }
+
+  if (selectedStore) {
+    return (
+      <StoreProfileView
+        store={selectedStore}
+        onBack={() => setSelectedStore(null)}
+        onMasterClick={() => handleMasterClick(selectedStore.masterId)}
+      />
+    );
+  }
+
   if (selectedMaster) {
     const masterNotesForProfile = masterNotes.filter(n => n.master.id === selectedMaster.id);
     return (
@@ -436,6 +730,7 @@ export function CommunityView() {
         notes={masterNotesForProfile}
         onBack={handleBackFromMaster}
         onNoteClick={handleMasterNoteClick}
+        onStoreClick={handleStoreClick}
       />
     );
   }
@@ -464,8 +759,40 @@ export function CommunityView() {
             }
           }}
           onMasterClick={handleMasterClick}
+          onStoreClick={handleStoreClick}
         />
       </div>
+    );
+  }
+
+  if (subPage === 'masters') {
+    return (
+      <MasterCollectionPage
+        onBack={() => setSubPage(null)}
+        onNoteClick={(note) => {
+          setPreviousView('list');
+          setSelectedNote(note);
+        }}
+        onMasterClick={handleMasterClick}
+      />
+    );
+  }
+
+  if (subPage === 'reviews') {
+    return (
+      <ReviewCollectionPage
+        onBack={() => setSubPage(null)}
+        onReviewClick={handleReviewClick}
+      />
+    );
+  }
+
+  if (subPage === 'knowledge') {
+    return (
+      <KnowledgeCollectionPage
+        onBack={() => setSubPage(null)}
+        onArticleClick={setSelectedKnowledge}
+      />
     );
   }
 
@@ -480,6 +807,13 @@ export function CommunityView() {
            </div>
            <p className="text-[10px] text-stone-400">连接同频的灵魂与价值</p>
         </div>
+        <button
+          onClick={handlePublish}
+          className="flex items-center rounded-full bg-stone-900 px-3 py-2 text-[10px] font-medium text-amber-50 shadow-sm"
+        >
+          <Camera size={13} className="mr-1.5" />
+          发布
+        </button>
       </div>
 
       {/* Scrollable Tabs */}
@@ -510,20 +844,20 @@ export function CommunityView() {
              真知
            </button>
            <button
+             onClick={() => setActiveTab('live')}
+             className={`px-4 py-1.5 rounded-full text-xs font-medium transition-all whitespace-nowrap ${
+               activeTab === 'live' ? 'bg-white shadow-sm text-stone-900' : 'text-stone-500 hover:text-stone-700'
+             }`}
+           >
+             直播
+           </button>
+           <button
              onClick={() => setActiveTab('circles')}
              className={`px-4 py-1.5 rounded-full text-xs font-medium transition-all whitespace-nowrap ${
                activeTab === 'circles' ? 'bg-white shadow-sm text-stone-900' : 'text-stone-500 hover:text-stone-700'
              }`}
            >
              圈子
-           </button>
-           <button
-             onClick={() => setActiveTab('notes')}
-             className={`px-4 py-1.5 rounded-full text-xs font-medium transition-all whitespace-nowrap ${
-               activeTab === 'notes' ? 'bg-white shadow-sm text-stone-900' : 'text-stone-500 hover:text-stone-700'
-             }`}
-           >
-             笔记
            </button>
         </div>
       </div>
@@ -534,18 +868,13 @@ export function CommunityView() {
         {/* Master Tab */}
         {activeTab === 'master' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-             <div className="mb-6 bg-gradient-to-r from-amber-50 to-stone-50 border border-amber-100 rounded-xl p-4 flex items-center justify-between">
-                <div>
-                   <div className="flex items-center space-x-2 mb-1">
-                      <Star size={14} className="text-amber-700 fill-amber-700" />
-                      <span className="text-xs font-bold text-stone-900">本周推荐主理人</span>
-                   </div>
-                   <p className="text-[10px] text-stone-500">三位用心做事的人，三家值得探访的店</p>
-                </div>
-                <button className="bg-stone-900 text-amber-100 text-[10px] px-3 py-1.5 rounded-full">
-                   全部
-                </button>
-             </div>
+             <SectionIntro
+               icon={Star}
+               title="本周推荐主理人"
+               subtitle="三位用心做事的人，三家值得探访的店"
+               action="全部"
+               onAction={() => setSubPage('masters')}
+             />
 
              <div className="space-y-6">
               {masterNotes.map((note, index) => (
@@ -626,18 +955,13 @@ export function CommunityView() {
         {/* Review Tab */}
         {activeTab === 'review' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-             <div className="mb-6 bg-gradient-to-r from-amber-50 to-stone-50 border border-amber-100 rounded-xl p-4 flex items-center justify-between">
-                <div>
-                   <div className="flex items-center space-x-2 mb-1">
-                      <Award size={14} className="text-amber-700" />
-                      <span className="text-xs font-bold text-stone-900">品鉴官精选测评</span>
-                   </div>
-                   <p className="text-[10px] text-stone-500">真实体验，深度测评，不踩坑</p>
-                </div>
-                <button className="bg-stone-900 text-amber-100 text-[10px] px-3 py-1.5 rounded-full">
-                   全部
-                </button>
-             </div>
+             <SectionIntro
+               icon={Award}
+               title="品鉴官精选测评"
+               subtitle="真实体验，深度测评，不踩坑"
+               action="全部"
+               onAction={() => setSubPage('reviews')}
+             />
 
              <div className="space-y-6">
               {reviewNotes.map((note, index) => (
@@ -732,18 +1056,13 @@ export function CommunityView() {
         {/* Knowledge Tab */}
         {activeTab === 'knowledge' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-             <div className="mb-6 bg-gradient-to-r from-amber-50 to-stone-50 border border-amber-100 rounded-xl p-4 flex items-center justify-between">
-                <div>
-                   <div className="flex items-center space-x-2 mb-1">
-                      <BookMarked size={14} className="text-amber-700" />
-                      <span className="text-xs font-bold text-stone-900">本周真知 · 重点关注</span>
-                   </div>
-                   <p className="text-[10px] text-stone-500">家族信托视角下的艺术品配置策略</p>
-                </div>
-                <button className="bg-stone-900 text-amber-100 text-[10px] px-3 py-1.5 rounded-full">
-                   阅读报告
-                </button>
-             </div>
+             <SectionIntro
+               icon={BookMarked}
+               title="本周真知 · 重点关注"
+               subtitle="家族信托视角下的艺术品配置策略"
+               action="阅读报告"
+               onAction={() => setSubPage('knowledge')}
+             />
 
              <div className="space-y-8">
               {knowledgeArticles.map((article, index) => (
@@ -752,6 +1071,7 @@ export function CommunityView() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
+                  onClick={() => setSelectedKnowledge(article)}
                   className="group relative"
                 >
                   {/* Author Header */}
@@ -817,6 +1137,84 @@ export function CommunityView() {
           </motion.div>
         )}
 
+        {/* Live Tab */}
+        {activeTab === 'live' && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+             <SectionIntro
+               icon={Radio}
+               title="直播 · 品味发布会"
+               subtitle="主理人实时讲解，品鉴官见证背书，直播后沉淀为视频手记"
+               action="回放"
+               onAction={() => toast.info('直播回放将沉淀为圈层视频手记')}
+             />
+
+             <div className="space-y-5">
+              <div className="overflow-hidden rounded-2xl bg-stone-950 text-white shadow-lg">
+                <div className="relative h-48 overflow-hidden">
+                  <img
+                    src="https://images.unsplash.com/photo-1544787219-7f47ccb76574?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
+                    alt="清山茶事直播"
+                    className="h-full w-full object-cover opacity-80"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/20 to-transparent" />
+                  <div className="absolute left-4 top-4 flex items-center rounded-full bg-red-500/15 px-3 py-1 text-[10px] text-red-100 ring-1 ring-red-400/30">
+                    <span className="mr-1.5 h-1.5 w-1.5 animate-pulse rounded-full bg-red-400" />
+                    正在直播
+                  </div>
+                  <div className="absolute bottom-4 left-4 right-4">
+                    <p className="text-[10px] text-amber-200">清山茶事 · 新品发布 / 品鉴官对谈</p>
+                    <h3 className="mt-1 font-serif text-xl leading-snug">云隐汝窑壶直播品味发布会</h3>
+                  </div>
+                </div>
+                <div className="p-4">
+                  <div className="mb-4 flex items-center justify-between">
+                    <div className="flex items-center">
+                      <img src={mastersData.qingshan.avatar} alt="陈清" className="mr-2 h-8 w-8 rounded-full object-cover" />
+                      <div>
+                        <p className="text-xs font-semibold">陈清 · 品味主理人</p>
+                        <p className="text-[10px] text-stone-400">茶悟先生连线见证中</p>
+                      </div>
+                    </div>
+                    <span className="rounded-full bg-white/10 px-2 py-1 text-[10px] text-stone-200">1,284 人看</span>
+                  </div>
+                  <div className="grid grid-cols-3 gap-2 text-center">
+                    {['品鉴官背书', '追问上墙', '直播价闭环'].map((label) => (
+                      <div key={label} className="rounded-xl bg-white/8 px-2 py-2 text-[10px] text-stone-200">
+                        {label}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-stone-100 bg-white p-4 shadow-sm">
+                <div className="mb-3 flex items-center justify-between">
+                  <div>
+                    <p className="text-[10px] tracking-[0.22em] text-amber-700">REPLAY NOTE</p>
+                    <h3 className="mt-1 font-serif text-lg text-stone-900">直播精华手记</h3>
+                  </div>
+                  <PlayCircle size={20} className="text-amber-700" />
+                </div>
+                <div className="space-y-3">
+                  {[
+                    { title: '如何判断一把汝窑壶的出水稳定性？', meta: '品鉴官评论切片 · 03:18' },
+                    { title: '会员追问：独饮容量应该怎么选？', meta: '追问上墙 · 01:46' },
+                    { title: '直播价商品卡：库存、倒计时与心意清单', meta: '交易闭环演示 · 02:22' },
+                  ].map((item) => (
+                    <button key={item.title} className="flex w-full items-center justify-between rounded-2xl bg-stone-50 px-3 py-3 text-left">
+                      <div>
+                        <p className="text-xs font-medium text-stone-900">{item.title}</p>
+                        <p className="mt-1 text-[10px] text-stone-400">{item.meta}</p>
+                      </div>
+                      <ChevronRight size={14} className="text-stone-300" />
+                    </button>
+                  ))}
+                </div>
+              </div>
+             </div>
+          </motion.div>
+        )}
+
         {/* Circles Tab */}
         {activeTab === 'circles' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
@@ -873,42 +1271,6 @@ export function CommunityView() {
                    ))}
                 </div>
              </div>
-          </motion.div>
-        )}
-
-        {/* Notes Tab */}
-        {activeTab === 'notes' && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-             <div className="flex items-center justify-between mb-4 px-1">
-               <h3 className="text-sm font-bold text-stone-900">圈层生活</h3>
-               <button className="flex items-center text-[10px] bg-stone-900 text-amber-50 px-3 py-1.5 rounded-full space-x-1">
-                  <Camera size={12} />
-                  <span>发布笔记</span>
-               </button>
-             </div>
-             <ResponsiveMasonry columnsCountBreakPoints={{350: 2, 750: 3}}>
-                <Masonry gutter="12px">
-                   {lifeNotes.map(note => (
-                      <div key={note.id} className="bg-white rounded-xl overflow-hidden shadow-sm border border-stone-100 break-inside-avoid hover:shadow-md transition-shadow">
-                         <img src={note.image} className="w-full object-cover" alt={note.title} />
-                         <div className="p-3">
-                            <h4 className="text-xs font-serif font-medium text-stone-900 mb-2 line-clamp-2">{note.title}</h4>
-                            <div className="flex justify-between items-center">
-                               <div className="flex items-center space-x-1.5">
-                                  <div className="w-4 h-4 rounded-full overflow-hidden bg-stone-100">
-                                     <img src={note.author.avatar} className="w-full h-full object-cover" alt={note.author.name} />
-                                  </div>
-                                  <span className="text-[10px] text-stone-500 truncate max-w-[60px]">{note.author.name}</span>
-                               </div>
-                               <div className="flex items-center text-stone-400 text-[10px]">
-                                  <Heart size={10} className="mr-0.5" /> {note.likes}
-                               </div>
-                            </div>
-                         </div>
-                      </div>
-                   ))}
-                </Masonry>
-             </ResponsiveMasonry>
           </motion.div>
         )}
 

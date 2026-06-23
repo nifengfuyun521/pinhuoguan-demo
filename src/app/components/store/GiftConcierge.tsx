@@ -1,84 +1,94 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Gift, Heart, Sparkles, ChevronRight, Send } from 'lucide-react';
+import { X, Gift, Heart, Sparkles, ChevronRight, Send, Users, SlidersHorizontal } from 'lucide-react';
 
 interface GiftConciergeProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-const relationships = [
-  { id: 'elder', label: '长辈', icon: '🧓', desc: '送长辈' },
-  { id: 'partner', label: '伴侣', icon: '💑', desc: '送爱人' },
-  { id: 'friend', label: '好友', icon: '🍵', desc: '送朋友' },
-  { id: 'kid', label: '孩子', icon: '🧸', desc: '送孩子' },
-  { id: 'pet', label: '毛孩', icon: '🐾', desc: '送萌宠' },
-  { id: 'self', label: '自己', icon: '🧘', desc: '送自己' },
+const familyProfile = [
+  { label: '家庭画像', value: '三口之家 + 一位长辈常住' },
+  { label: '近期需求', value: '妈妈生日、长辈滋补、周末到访' },
+  { label: '消费偏好', value: '重视质感、健康、可长期使用' },
 ];
 
-const wishes = [
-  { id: 'health', label: '安康', desc: '身体健康' },
-  { id: 'peace', label: '清静', desc: '轻松自在' },
-  { id: 'joy', label: '开心', desc: '每天开心' },
-  { id: 'success', label: '顺利', desc: '工作顺利' },
+const relationships = [
+  { id: 'mother', label: '妈妈', desc: '生日礼物', profile: '偏爱温和护肤和有仪式感的小物' },
+  { id: 'elder', label: '长辈', desc: '日常关怀', profile: '更看重健康、体面和使用简单' },
+  { id: 'partner', label: '伴侣', desc: '惊喜表达', profile: '喜欢精致但不浮夸的质感礼' },
+  { id: 'friend', label: '好友', desc: '轻礼往来', profile: '适合不造成负担的小而美礼物' },
+  { id: 'kid', label: '孩子', desc: '成长陪伴', profile: '安全、有趣、能一起参与更好' },
+  { id: 'self', label: '自己', desc: '犒赏自己', profile: '适合提升生活质感的长期用品' },
+];
+
+const needs = [
+  { id: 'birthday', label: '生日', desc: '要有仪式感，也要实用' },
+  { id: 'health', label: '健康', desc: '滋补调理、少踩坑' },
+  { id: 'visit', label: '拜访', desc: '体面、不张扬、拿得出手' },
+  { id: 'comfort', label: '舒缓', desc: '让对方放松下来' },
 ];
 
 const recommendations: Record<string, any> = {
+  'mother-birthday': {
+    title: '珍稀白松露精华油',
+    price: '¥1,680',
+    category: '抗衰逆龄',
+    image: 'https://images.unsplash.com/photo-1705899853374-d91c048b81d2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600',
+    reason: '妈妈生日临近，画像里显示她偏爱温和护肤和仪式感；这件礼物既有质感，也不会显得过度浮夸。',
+    match: '匹配妈妈生日、抗衰护肤、年度会员偏好',
+  },
   'elder-health': {
-    title: "古树普洱礼盒",
-    price: "¥2,680",
-    image: "https://images.unsplash.com/photo-1755685068178-4b57210ddcd4?q=80&w=600&auto=format&fit=crop",
-    reason: "经典耐喝，长辈都喜欢。养胃，平时喝正好。",
-    poem: "茶烟轻扬落花风，松柏长青岁月同。"
+    title: '6年根红参切片',
+    price: '¥560',
+    category: '功能膳食',
+    image: 'https://images.unsplash.com/photo-1735815814303-0560d30455eb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600',
+    reason: '家庭画像里长辈常住，近期也有滋补需求；红参切片使用简单，适合日常关怀，不像保健品那样有压力。',
+    match: '匹配长辈滋补、日常关怀、低决策成本',
   },
-  'kid-joy': {
-    title: "益智木作拼图",
-    price: "¥380",
-    image: "https://images.unsplash.com/photo-1587654780291-39c940483713?q=80&w=600&auto=format&fit=crop",
-    reason: "天然木质，安全无毒。培养孩子的专注力，一起玩更有趣。",
-    poem: "童心无忌天地宽，且将新火试新茶。"
+  'elder-visit': {
+    title: '手作粗陶茶壶',
+    price: '¥1,280',
+    category: '茗茶雅道',
+    image: 'https://images.unsplash.com/photo-1584428885051-d80a38d86b39?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600',
+    reason: '拜访长辈时，茶器比单纯吃喝更耐用，也更能体现心意；适合喜欢慢生活和待客场景的家庭。',
+    match: '匹配拜访场景、长辈茶饮习惯、长期使用',
   },
-  'pet-health': {
-    title: "天然宠物SPA套装",
-    price: "¥299",
-    image: "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?q=80&w=600&auto=format&fit=crop",
-    reason: "温和植物配方，呵护毛孩子敏感肌肤。洗完香喷喷，抱起来更舒服。",
-    poem: "相伴无言情更深，岁月长情共朝昏。"
+  'friend-comfort': {
+    title: '海南沉香 · 奇楠种',
+    price: '¥2,800',
+    category: '空间能量',
+    image: 'https://images.unsplash.com/photo-1758903846845-e8ae224a5047?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600',
+    reason: '好友轻礼不宜太功利，沉香更像一种情绪照顾；适合工作压力大、需要放松空间的人。',
+    match: '匹配舒缓需求、空间疗愈、朋友关系',
   },
-  'friend-peace': {
-    title: "宋风影青香炉",
-    price: "¥860",
-    image: "https://images.unsplash.com/photo-1762553395050-ec394919a6ea?q=80&w=600&auto=format&fit=crop",
-    reason: "朋友间的小礼物，很有质感。放在家里点个香，很放松。",
-    poem: "与君初相识，犹如故人归。"
+  default: {
+    title: '纯银 · 手工锤纹茶杯',
+    price: '¥880',
+    category: '茗茶雅道',
+    image: 'https://images.unsplash.com/photo-1701933810995-3331d9ff463b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600',
+    reason: '根据家庭画像，这类长期可用、有质感、不过度私人的礼物最稳妥，适合多数关系和场景。',
+    match: '匹配家庭质感偏好、可长期使用、送礼安全感',
   },
-  'default': {
-    title: "手作羊脂玉瓷杯",
-    price: "¥420",
-    image: "https://images.unsplash.com/photo-1762631203805-88841687ab4d?q=80&w=600&auto=format&fit=crop",
-    reason: "手感温润，喝水喝茶都好用。很实用的礼物。",
-    poem: "莫道茶杯小，壶中日月长。"
-  }
 };
 
 export function GiftConcierge({ isOpen, onClose }: GiftConciergeProps) {
   const [step, setStep] = useState(1);
-  const [selections, setSelections] = useState<{ who?: string; wish?: string }>({});
+  const [selections, setSelections] = useState<{ who?: string; need?: string }>({});
 
   const handleSelectWho = (id: string) => {
     setSelections({ ...selections, who: id });
     setStep(2);
   };
 
-  const handleSelectWish = (id: string) => {
-    const newSelections = { ...selections, wish: id };
-    setSelections(newSelections);
+  const handleSelectNeed = (id: string) => {
+    setSelections({ ...selections, need: id });
     setStep(3);
   };
 
   const getRecommendation = () => {
-    const key = `${selections.who}-${selections.wish}`;
-    return recommendations[key] || recommendations['default'];
+    const key = `${selections.who}-${selections.need}`;
+    return recommendations[key] || recommendations.default;
   };
 
   const reset = () => {
@@ -86,6 +96,8 @@ export function GiftConcierge({ isOpen, onClose }: GiftConciergeProps) {
     setSelections({});
   };
 
+  const selectedPerson = relationships.find((item) => item.id === selections.who);
+  const selectedNeed = needs.find((item) => item.id === selections.need);
   const recommendation = step === 3 ? getRecommendation() : null;
 
   return (
@@ -97,53 +109,66 @@ export function GiftConcierge({ isOpen, onClose }: GiftConciergeProps) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-stone-900/60 backdrop-blur-sm z-50"
+            className="fixed inset-0 z-50 bg-stone-900/60 backdrop-blur-sm"
           />
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="fixed inset-x-4 top-[10%] bottom-[10%] md:inset-x-auto md:w-[480px] md:left-1/2 md:-translate-x-1/2 bg-stone-50 rounded-2xl shadow-2xl z-50 overflow-hidden flex flex-col"
+            className="fixed inset-x-4 top-[7%] bottom-[7%] z-50 flex flex-col overflow-hidden rounded-2xl bg-stone-50 shadow-2xl md:inset-x-auto md:left-1/2 md:w-[480px] md:-translate-x-1/2"
           >
-            {/* Header */}
-            <div className="relative h-32 bg-stone-900 flex items-center justify-center shrink-0">
-              <div className="absolute inset-0 opacity-20">
-                <img 
-                   src="https://images.unsplash.com/photo-1689259103820-a375e5a30e00?q=80&w=600&auto=format&fit=crop" 
-                   className="w-full h-full object-cover" 
-                   alt="bg"
-                />
-              </div>
-              <button onClick={onClose} className="absolute top-4 right-4 text-stone-400 hover:text-white">
+            <div className="relative h-36 shrink-0 bg-stone-900">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(245,158,11,0.22),transparent_36%),linear-gradient(135deg,rgba(255,255,255,0.08),transparent_45%)]"></div>
+              <button onClick={onClose} className="absolute right-4 top-4 text-stone-400 hover:text-white">
                 <X size={24} />
               </button>
-              <div className="text-center z-10">
-                <div className="w-12 h-12 bg-red-800 rounded-full mx-auto mb-2 flex items-center justify-center text-stone-100 border-2 border-stone-700">
-                  <Gift size={20} />
+              <div className="relative z-10 flex h-full items-center px-6">
+                <div className="mr-4 flex h-12 w-12 items-center justify-center rounded-2xl border border-amber-300/20 bg-amber-200/10 text-amber-100">
+                  <Sparkles size={22} />
                 </div>
-                <h2 className="text-xl font-serif text-stone-100 tracking-widest">礼物助手</h2>
-                <p className="text-xs text-stone-400 mt-1">帮你挑份好礼物</p>
+                <div>
+                  <div className="text-[10px] tracking-[0.2em] text-amber-200/80">AI GIFT CONCIERGE</div>
+                  <h2 className="mt-1 text-2xl font-serif text-amber-50">AI 礼物管家</h2>
+                  <p className="mt-1 text-xs text-stone-400">根据家庭画像与当下需求推荐</p>
+                </div>
               </div>
             </div>
 
-            {/* Content */}
-            <div className="flex-1 p-6 overflow-y-auto">
+            <div className="flex-1 overflow-y-auto p-6">
+              <div className="mb-6 rounded-2xl border border-amber-100 bg-amber-50/70 p-4">
+                <div className="mb-3 flex items-center space-x-2">
+                  <Users size={16} className="text-amber-700" />
+                  <span className="text-xs font-medium text-stone-900">已读取家庭画像</span>
+                </div>
+                <div className="space-y-2">
+                  {familyProfile.map((item) => (
+                    <div key={item.label} className="flex items-start justify-between gap-3 text-[11px]">
+                      <span className="shrink-0 text-stone-500">{item.label}</span>
+                      <span className="text-right leading-relaxed text-stone-800">{item.value}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               {step === 1 && (
-                <div className="space-y-6">
-                  <div className="text-center mb-8">
-                    <h3 className="text-lg font-serif text-stone-800">要送给谁？</h3>
-                    <div className="h-0.5 w-8 bg-red-800/30 mx-auto mt-2"></div>
+                <div className="space-y-5">
+                  <div>
+                    <h3 className="text-lg font-serif text-stone-900">这次想送给谁？</h3>
+                    <p className="mt-1 text-xs text-stone-500">AI 会结合关系、家庭画像和近期事件缩小选择范围。</p>
                   </div>
-                  <div className="grid grid-cols-3 gap-4">
+                  <div className="grid grid-cols-2 gap-3">
                     {relationships.map((rel) => (
                       <button
                         key={rel.id}
                         onClick={() => handleSelectWho(rel.id)}
-                        className="flex flex-col items-center justify-center p-4 bg-white border border-stone-100 rounded-xl hover:border-stone-300 hover:shadow-md transition-all group"
+                        className="rounded-2xl border border-stone-100 bg-white p-4 text-left shadow-sm transition-all hover:border-amber-100 hover:bg-amber-50/50"
                       >
-                        <span className="text-3xl mb-3 group-hover:scale-110 transition-transform">{rel.icon}</span>
-                        <span className="text-stone-900 font-medium mb-1 text-sm">{rel.label}</span>
-                        <span className="text-[10px] text-stone-400">{rel.desc}</span>
+                        <div className="mb-2 flex items-center justify-between">
+                          <span className="font-serif text-base text-stone-900">{rel.label}</span>
+                          <ChevronRight size={15} className="text-stone-300" />
+                        </div>
+                        <div className="text-[10px] text-amber-700">{rel.desc}</div>
+                        <p className="mt-2 text-[11px] leading-relaxed text-stone-500">{rel.profile}</p>
                       </button>
                     ))}
                   </div>
@@ -151,24 +176,28 @@ export function GiftConcierge({ isOpen, onClose }: GiftConciergeProps) {
               )}
 
               {step === 2 && (
-                <div className="space-y-6">
-                  <button onClick={() => setStep(1)} className="text-xs text-stone-400 flex items-center mb-4">
-                    ← 返回
+                <div className="space-y-5">
+                  <button onClick={() => setStep(1)} className="text-xs text-stone-400">
+                    ← 返回选择对象
                   </button>
-                  <div className="text-center mb-8">
-                    <h3 className="text-lg font-serif text-stone-800">希望礼物带去什么祝福？</h3>
-                    <div className="h-0.5 w-8 bg-red-800/30 mx-auto mt-2"></div>
+                  <div>
+                    <h3 className="text-lg font-serif text-stone-900">这次礼物解决什么需求？</h3>
+                    <p className="mt-1 text-xs text-stone-500">
+                      已选择：{selectedPerson?.label}。AI 会优先考虑真实场景，而不是只看价格。
+                    </p>
                   </div>
                   <div className="space-y-3">
-                    {wishes.map((wish) => (
+                    {needs.map((need) => (
                       <button
-                        key={wish.id}
-                        onClick={() => handleSelectWish(wish.id)}
-                        className="w-full flex items-center justify-between p-4 bg-white border border-stone-100 rounded-xl hover:border-stone-300 hover:shadow-md transition-all text-left group"
+                        key={need.id}
+                        onClick={() => handleSelectNeed(need.id)}
+                        className="flex w-full items-center justify-between rounded-2xl border border-stone-100 bg-white p-4 text-left shadow-sm transition-all hover:border-amber-100 hover:bg-amber-50/50"
                       >
-                        <span className="text-stone-900 font-medium text-lg font-serif">{wish.label}</span>
-                        <span className="text-xs text-stone-400 group-hover:text-stone-600">{wish.desc}</span>
-                        <ChevronRight size={16} className="text-stone-300 group-hover:text-stone-600" />
+                        <div>
+                          <div className="font-serif text-base text-stone-900">{need.label}</div>
+                          <div className="mt-1 text-xs text-stone-500">{need.desc}</div>
+                        </div>
+                        <ChevronRight size={16} className="text-stone-300" />
                       </button>
                     ))}
                   </div>
@@ -176,55 +205,63 @@ export function GiftConcierge({ isOpen, onClose }: GiftConciergeProps) {
               )}
 
               {step === 3 && recommendation && (
-                <div className="flex flex-col h-full">
+                <div className="flex min-h-full flex-col">
                   <div className="flex-1">
-                    <div className="bg-stone-100/50 p-6 rounded-t-2xl border border-stone-200 text-center relative overflow-hidden">
-                      <div className="absolute top-0 left-0 w-full h-1 bg-red-800/20"></div>
-                      <p className="text-xs text-stone-500 mb-2 font-serif">送给 · {relationships.find(r => r.id === selections.who)?.label}</p>
-                      <h3 className="text-xl font-serif text-stone-900 mb-4 leading-relaxed">
-                         “{recommendation.poem}”
-                      </h3>
-                      <p className="text-xs text-stone-500 leading-relaxed px-4">
-                        {recommendation.reason}
-                      </p>
-                    </div>
-                    
-                    <div className="bg-white p-4 rounded-b-2xl border-x border-b border-stone-200 shadow-sm flex gap-4">
-                      <div className="w-24 h-24 bg-stone-100 rounded-lg overflow-hidden shrink-0">
-                        <img src={recommendation.image} className="w-full h-full object-cover" alt="product" />
+                    <div className="mb-4 rounded-2xl border border-stone-200 bg-white p-4 shadow-sm">
+                      <div className="mb-3 flex items-center justify-between">
+                        <div>
+                          <div className="text-[10px] tracking-[0.18em] text-amber-700">AI 推荐结果</div>
+                          <h3 className="mt-1 text-xl font-serif text-stone-900">{recommendation.title}</h3>
+                        </div>
+                        <span className="rounded-full bg-amber-50 px-2.5 py-1 text-[10px] text-amber-800">{recommendation.category}</span>
                       </div>
-                      <div className="flex flex-col justify-center">
-                        <span className="inline-block px-2 py-0.5 bg-red-50 text-red-800 text-[10px] rounded mb-1 self-start">推荐</span>
-                        <h4 className="font-medium text-stone-900 mb-1">{recommendation.title}</h4>
-                        <p className="text-lg font-serif text-stone-900">{recommendation.price}</p>
+                      <div className="flex gap-4">
+                        <div className="h-28 w-28 shrink-0 overflow-hidden rounded-xl bg-stone-100">
+                          <img src={recommendation.image} className="h-full w-full object-cover" alt="product" />
+                        </div>
+                        <div className="flex min-w-0 flex-col justify-center">
+                          <div className="text-lg font-serif text-stone-900">{recommendation.price}</div>
+                          <p className="mt-2 text-xs leading-relaxed text-stone-500">{recommendation.reason}</p>
+                        </div>
                       </div>
                     </div>
 
-                    <div className="mt-6">
-                       <div className="flex items-center justify-between text-xs text-stone-500 mb-3 px-2">
-                          <span>包含服务</span>
-                       </div>
-                       <div className="flex gap-2">
-                          <div className="flex-1 bg-stone-100 py-3 rounded-lg flex flex-col items-center justify-center text-xs text-stone-600">
-                            <Heart size={14} className="mb-1 text-red-800/60"/>
-                            <span>礼品包装</span>
-                          </div>
-                          <div className="flex-1 bg-stone-100 py-3 rounded-lg flex flex-col items-center justify-center text-xs text-stone-600">
-                            <Sparkles size={14} className="mb-1 text-red-800/60"/>
-                            <span>手写贺卡</span>
-                          </div>
-                       </div>
+                    <div className="rounded-2xl border border-amber-100 bg-amber-50/70 p-4">
+                      <div className="mb-2 flex items-center space-x-2">
+                        <SlidersHorizontal size={15} className="text-amber-700" />
+                        <span className="text-xs font-medium text-stone-900">AI 匹配依据</span>
+                      </div>
+                      <p className="text-[11px] leading-relaxed text-stone-600">{recommendation.match}</p>
+                      <div className="mt-3 grid grid-cols-2 gap-2 text-[10px]">
+                        <div className="rounded-xl bg-white/70 p-2 text-stone-600">对象：{selectedPerson?.label}</div>
+                        <div className="rounded-xl bg-white/70 p-2 text-stone-600">需求：{selectedNeed?.label}</div>
+                      </div>
+                    </div>
+
+                    <div className="mt-4 flex gap-2">
+                      <div className="flex-1 rounded-xl bg-stone-100 py-3 text-center text-xs text-stone-600">
+                        <Heart size={14} className="mx-auto mb-1 text-amber-700" />
+                        礼品包装
+                      </div>
+                      <div className="flex-1 rounded-xl bg-stone-100 py-3 text-center text-xs text-stone-600">
+                        <Gift size={14} className="mx-auto mb-1 text-amber-700" />
+                        祝福卡片
+                      </div>
+                      <div className="flex-1 rounded-xl bg-stone-100 py-3 text-center text-xs text-stone-600">
+                        <Sparkles size={14} className="mx-auto mb-1 text-amber-700" />
+                        换礼建议
+                      </div>
                     </div>
                   </div>
 
                   <div className="mt-6 flex gap-3">
-                     <button onClick={reset} className="flex-1 py-3 border border-stone-300 rounded-full text-stone-600 text-sm">
-                       重新选
-                     </button>
-                     <button className="flex-[2] py-3 bg-stone-900 text-stone-50 rounded-full text-sm flex items-center justify-center shadow-lg hover:bg-stone-800">
-                       <Send size={14} className="mr-2" /> 
-                       选这个
-                     </button>
+                    <button onClick={reset} className="flex-1 rounded-full border border-stone-300 py-3 text-sm text-stone-600">
+                      重新选
+                    </button>
+                    <button className="flex-[2] rounded-full bg-stone-900 py-3 text-sm text-stone-50 shadow-lg hover:bg-stone-800 flex items-center justify-center">
+                      <Send size={14} className="mr-2" />
+                      加入送礼清单
+                    </button>
                   </div>
                 </div>
               )}

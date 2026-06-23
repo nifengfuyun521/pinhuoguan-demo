@@ -47,6 +47,8 @@ import { CoCreationContentView } from './CoCreationContentView';
 import { OrderListView } from './OrderListView';
 import { TastingOfficerView } from './TastingOfficerView';
 import { MyContentView } from './MyContentView';
+import { MerchantWorkbenchView } from './MerchantWorkbenchView';
+import { EcoConsumerWorkbenchView } from './EcoConsumerWorkbenchView';
 
 function SectionHeader({
   eyebrow,
@@ -427,6 +429,8 @@ export function ProfileView() {
   const [showCoBuilderApply, setShowCoBuilderApply] = React.useState(false);
   const [showCoCreationContent, setShowCoCreationContent] = React.useState(false);
   const [showOrders, setShowOrders] = React.useState(false);
+  const [showMerchantWorkbench, setShowMerchantWorkbench] = React.useState(false);
+  const [showEcoConsumerWorkbench, setShowEcoConsumerWorkbench] = React.useState(false);
   const [showTastingOfficer, setShowTastingOfficer] = React.useState(false);
   const [tastingOfficerInitialView, setTastingOfficerInitialView] = React.useState<'workbench' | 'growth'>('workbench');
   const [showMyContent, setShowMyContent] = React.useState(false);
@@ -512,6 +516,8 @@ export function ProfileView() {
   if (showFavorites) return <FavoritesView onBack={() => setShowFavorites(false)} />;
   if (showInvite) return <InviteView onBack={() => setShowInvite(false)} />;
   if (showService) return <ServiceView onBack={() => setShowService(false)} />;
+  if (showMerchantWorkbench) return <MerchantWorkbenchView onBack={() => setShowMerchantWorkbench(false)} />;
+  if (showEcoConsumerWorkbench) return <EcoConsumerWorkbenchView onBack={() => setShowEcoConsumerWorkbench(false)} />;
   if (showCoBuilderApply) return <CoBuilderApplyView onBack={() => setShowCoBuilderApply(false)} />;
 
   const renderSortableModule = (key: SortableModuleKey, index: number) => {
@@ -633,6 +639,14 @@ export function ProfileView() {
                   setShowTastingOfficer(true);
                 }}
               />
+              <WorkspaceCard
+                icon={Users}
+                title="生态消费商工作台"
+                status="服务任务、客户协同、培训与工单"
+                badge="初级"
+                tone="soft"
+                onClick={() => setShowEcoConsumerWorkbench(true)}
+              />
               <div className="grid grid-cols-2 gap-3">
                 <WorkspaceCard
                   icon={PenTool}
@@ -649,9 +663,12 @@ export function ProfileView() {
                   onClick={() => setShowCoBuilderApply(true)}
                 />
               </div>
-              <ListItem icon={Store} label="商家工作台" desc="商家入驻后可在这里管理核销与店铺" onClick={() => {
-                toast.info('商家工作台将在您入驻商家后开放');
-              }} />
+              <ListItem
+                icon={Store}
+                label="商家工作台"
+                desc="核销、权益、活动与 AI 经营助手"
+                onClick={() => setShowMerchantWorkbench(true)}
+              />
             </div>
           </section>
         );
@@ -776,6 +793,7 @@ export function ProfileView() {
                     <div>
                       <div className="text-[10px] tracking-[0.24em] text-amber-200/80">PINHUOGUAN BLACK</div>
                       <div className="mt-2 text-2xl font-serif text-amber-50">年度尊享会员</div>
+                      <div className="mt-2 text-xs text-stone-400">本月已省 ¥680，全年已省 ¥7,240。</div>
                     </div>
                     <div className="rounded-full border border-amber-300/30 bg-amber-300/10 px-3 py-1 text-[10px] text-amber-100">
                       No. 88001

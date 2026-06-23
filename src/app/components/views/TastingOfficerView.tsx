@@ -5,10 +5,12 @@ import {
   Star,
   Award,
   Zap,
-  ClipboardCheck,
   MessageSquareText,
   PenTool,
   SlidersHorizontal,
+  Store,
+  Handshake,
+  UsersRound,
   Clock3,
   ChevronRight,
   CheckCircle2,
@@ -90,6 +92,51 @@ function CapabilityCard({
   );
 }
 
+function PrivilegeCard({
+  icon: Icon,
+  title,
+  benefit,
+  metric,
+  progress,
+  action,
+}: {
+  icon: React.ElementType;
+  title: string;
+  benefit: string;
+  metric: string;
+  progress: string;
+  action: string;
+}) {
+  return (
+    <button className="w-full rounded-3xl border border-stone-200 bg-gradient-to-br from-stone-100 via-amber-50/50 to-stone-50 p-4 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
+      <div className="mb-4 flex items-start justify-between">
+        <div className="flex items-center space-x-3">
+          <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-amber-100 bg-amber-100/70 text-amber-800">
+            <Icon size={19} />
+          </div>
+          <div>
+            <div className="text-sm font-medium text-stone-900">{title}</div>
+            <div className="mt-0.5 text-[10px] tracking-[0.16em] text-amber-700">{benefit}</div>
+          </div>
+        </div>
+        <span className="rounded-full border border-stone-200 bg-white/70 px-2.5 py-1 text-[10px] text-stone-600">{metric}</span>
+      </div>
+
+      <div className="mb-4 rounded-2xl border border-white/70 bg-white/55 p-3">
+        <div className="flex items-center justify-between text-[11px] text-stone-500">
+          <span>{progress}</span>
+          <ChevronRight size={13} className="text-stone-300" />
+        </div>
+      </div>
+
+      <div className="flex items-center justify-between text-[11px]">
+        <span className="text-stone-500">{action}</span>
+        <span className="font-medium text-amber-800">去处理</span>
+      </div>
+    </button>
+  );
+}
+
 export function TastingOfficerView({ onBack, initialView = 'workbench' }: TastingOfficerViewProps) {
   const [activeView, setActiveView] = React.useState<'workbench' | 'growth'>(initialView);
 
@@ -129,6 +176,41 @@ export function TastingOfficerView({ onBack, initialView = 'workbench' }: Tastin
       title: '品鉴档案',
       desc: '记录擅长品类、可信反馈和历史贡献。',
       count: '已完善',
+    },
+  ];
+
+  const advancedPrivileges = [
+    {
+      icon: SlidersHorizontal,
+      title: '品类共创',
+      benefit: '优先参与商品品类共创',
+      metric: '3 个项目',
+      progress: '香插听雨系列二审中，白松露精华油已采纳 2 条建议',
+      action: '查看可参与品类池与共创进度',
+    },
+    {
+      icon: Store,
+      title: '资源引荐',
+      benefit: '供应链及商家引荐特权',
+      metric: '2 条线索',
+      progress: '山隐私厨待平台评估，红参源头工厂资料待补充',
+      action: '提交商家 / 工厂线索',
+    },
+    {
+      icon: Handshake,
+      title: '异业共建',
+      benefit: '异业资源深度共建权限',
+      metric: '1 个机会',
+      progress: '茶空间 x 香氛品鉴会进入合作方案确认',
+      action: '查看共建机会与资源匹配',
+    },
+    {
+      icon: UsersRound,
+      title: '圈层赋能',
+      benefit: '圈层社群组织管理赋能',
+      metric: '28 人触达',
+      progress: '本周可发起 1 场小型品鉴招募，待确认主题',
+      action: '管理圈层活动与成员转化',
     },
   ];
 
@@ -329,7 +411,7 @@ export function TastingOfficerView({ onBack, initialView = 'workbench' }: Tastin
                 </div>
                 <h1 className="mt-2 text-3xl font-serif text-stone-900">高级品鉴官</h1>
                 <p className="mt-1 max-w-[18rem] text-[11px] leading-relaxed text-stone-500">
-                  负责试用、反馈、内容沉淀、选品建议与审核跟进，是平台信任链路里的品味节点。
+                  除试用与反馈外，可参与品类共创、资源引荐、异业共建与圈层组织，是平台信任链路里的关键节点。
                 </p>
               </div>
               <div className="rounded-full border border-amber-200 bg-white/70 px-3 py-1 text-[10px] text-amber-800">
@@ -353,9 +435,9 @@ export function TastingOfficerView({ onBack, initialView = 'workbench' }: Tastin
             </div>
 
             <div className="grid grid-cols-3 gap-2">
-              <StatPill label="待反馈" value="1" />
-              <StatPill label="试用中" value="2" />
-              <StatPill label="审核中" value="2" />
+              <StatPill label="共创中" value="3" />
+              <StatPill label="引荐中" value="2" />
+              <StatPill label="圈层任务" value="1" />
             </div>
           </div>
         </div>
@@ -368,7 +450,7 @@ export function TastingOfficerView({ onBack, initialView = 'workbench' }: Tastin
               <div className="text-[10px] tracking-[0.18em] text-stone-400">待办</div>
               <h2 className="mt-1 text-lg font-serif text-stone-900">今天需要处理</h2>
             </div>
-            <span className="rounded-full bg-amber-50 px-3 py-1 text-[10px] text-amber-700 border border-amber-100">3 项</span>
+            <span className="rounded-full bg-amber-50 px-3 py-1 text-[10px] text-amber-700 border border-amber-100">4 项</span>
           </div>
           <div className="space-y-3">
             <TaskItem
@@ -385,18 +467,39 @@ export function TastingOfficerView({ onBack, initialView = 'workbench' }: Tastin
               tag="审核中"
             />
             <TaskItem
-              icon={PenTool}
-              title="补充一篇品鉴手记"
-              desc="建议围绕真实使用场景，而不是只写商品亮点。"
-              tag="可发布"
+              icon={Store}
+              title="补充红参源头工厂引荐资料"
+              desc="需要完善资质、供货稳定性和可共创品类说明。"
+              tag="待补充"
             />
+            <TaskItem
+              icon={UsersRound}
+              title="确认本周圈层品鉴招募主题"
+              desc="可从茶空间、香氛或家庭滋补三个方向中选择。"
+              tag="可组织"
+            />
+          </div>
+        </section>
+
+        <section>
+          <div className="mb-4 flex items-center justify-between">
+            <div>
+              <div className="text-[10px] tracking-[0.18em] text-amber-700">高级特权</div>
+              <h2 className="mt-1 text-lg font-serif text-stone-900">高级品鉴官工作区</h2>
+            </div>
+            <span className="rounded-full border border-stone-200 bg-stone-100 px-3 py-1 text-[10px] text-stone-500">4 项开放</span>
+          </div>
+          <div className="space-y-3">
+            {advancedPrivileges.map((item) => (
+              <PrivilegeCard key={item.title} {...item} />
+            ))}
           </div>
         </section>
 
         <section>
           <div className="mb-4">
             <div className="text-[10px] tracking-[0.18em] text-stone-400">能力</div>
-            <h2 className="mt-1 text-lg font-serif text-stone-900">品鉴工作区</h2>
+            <h2 className="mt-1 text-lg font-serif text-stone-900">基础品鉴工作区</h2>
           </div>
           <div className="grid grid-cols-2 gap-3">
             {capabilities.map((item) => (

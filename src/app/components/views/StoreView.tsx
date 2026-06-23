@@ -1,10 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Search, SlidersHorizontal, ShoppingCart, Gift, Star, Sparkles, ArrowRight, Quote } from 'lucide-react';
 import { GiftConcierge } from '../store/GiftConcierge';
 import { ProductDetail } from '../store/ProductDetail';
 
-const categories = ["全部", "护肤", "茶器", "保健", "宠物", "雅物"];
+const categories = [
+  "全部",
+  "典藏佳酿",
+  "抗衰逆龄",
+  "功能膳食",
+  "时令鲜果",
+  "尊享礼盒",
+  "茗茶雅道",
+  "私密养护",
+  "特膳调理",
+  "物联科技",
+  "空间能量",
+];
 
 const products = [
   {
@@ -12,7 +24,7 @@ const products = [
     title: "珍稀白松露精华油",
     subtitle: "晨曦中的森林馈赠",
     price: "¥1,680",
-    category: "护肤",
+    category: "抗衰逆龄",
     image: "https://images.unsplash.com/photo-1705899853374-d91c048b81d2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3aGl0ZSUyMHRydWZmbGUlMjBvaWwlMjBib3R0bGUlMjBsdXh1cnklMjBjb3NtZXRpYyUyMG1pbmltYWxpc3R8ZW58MXx8fHwxNzY0NTczMjAwfDA&ixlib=rb-4.1.0&q=80&w=600",
     tag: "回购王",
     isFeatured: true,
@@ -50,7 +62,7 @@ const products = [
     title: "6年根红参切片",
     subtitle: "守候六年的承诺",
     price: "¥560",
-    category: "保健",
+    category: "功能膳食",
     image: "https://images.unsplash.com/photo-1735815814303-0560d30455eb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkcmllZCUyMHJlZCUyMGdpbnNlbmclMjByb290cyUyMHNsaWNlc3xlbnwxfHx8fDE3NjQ1NjY0ODZ8MA&ixlib=rb-4.1.0&q=80&w=600",
     tag: "滋补",
     selectionReason: "感觉累的时候含一片，精神马上就回来了。送长辈也很合适，都知道是好东西。",
@@ -87,7 +99,7 @@ const products = [
     title: "手作粗陶茶壶",
     subtitle: "指尖上的修行",
     price: "¥1,280",
-    category: "茶器",
+    category: "茗茶雅道",
     image: "https://images.unsplash.com/photo-1584428885051-d80a38d86b39?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxoYW5kbWFkZSUyMHBvdHRlcnklMjB0ZWFwb3QlMjB3YWJpJTIwc2FiaXxlbnwxfHx8fDE3NjQ1NjY0ODZ8MA&ixlib=rb-4.1.0&q=80&w=600",
     tag: "限量",
     selectionReason: "手感温润，出水断水都很利落。每一把都不一样，自用或待客都很显品味。",
@@ -124,7 +136,7 @@ const products = [
     title: "天然宠物SPA套装",
     subtitle: "给毛孩子的温柔呵护",
     price: "¥299",
-    category: "宠物",
+    category: "特膳调理",
     image: "https://images.unsplash.com/photo-1583534778255-5d67d3dcf95d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkb2clMjB0YWtpbmclMjBiYXRoJTIwYnViYmxlJTIwc3BhfGVufDF8fHx8MTc2NDU2NjQ4Nnww&ixlib=rb-4.1.0&q=80&w=600",
     tag: "新品",
     selectionReason: "温和植物配方，呵护毛孩子敏感肌肤。洗完香喷喷，抱起来更舒服。",
@@ -161,7 +173,7 @@ const products = [
     title: "海南沉香 · 奇楠种",
     subtitle: "一两沉香一两金",
     price: "¥2,800",
-    category: "雅物",
+    category: "空间能量",
     image: "https://images.unsplash.com/photo-1758903846845-e8ae224a5047?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxidXJuaW5nJTIwaW5jZW5zZSUyMHN0aWNrJTIwc21va2UlMjB6ZW58ZW58MXx8fHwxNzY0NTY2NDg2fDA&ixlib=rb-4.1.0&q=80&w=600",
     tag: "收藏级",
     selectionReason: "点燃一根，满室生香。那种穿透力的凉意和甜韵，是化学香精绝对无法模仿的。",
@@ -198,7 +210,7 @@ const products = [
     title: "苏绣 · 双面绣团扇",
     subtitle: "摇曳生风的东方美学",
     price: "¥3,600",
-    category: "雅物",
+    category: "空间能量",
     image: "https://images.unsplash.com/photo-1657470036063-c7e49da31393?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0cmFkaXRpb25hbCUyMGNoaW5lc2UlMjBlbWJyb2lkZXJ5JTIwZmFuJTIwc2lsa3xlbnwxfHx8fDE3NjQ1NjY0ODZ8MA&ixlib=rb-4.1.0&q=80&w=600",
     tag: "非遗",
     selectionReason: "每一针一线都是绣娘的心血。拿在手里，不仅是扇风的工具，更是一件可以把玩的艺术品。",
@@ -235,7 +247,7 @@ const products = [
     title: "黑金 · 鱼子酱面霜",
     subtitle: "逆转时光的深海奇迹",
     price: "¥2,400",
-    category: "护肤",
+    category: "抗衰逆龄",
     image: "https://images.unsplash.com/photo-1543463573-35e4afd0ab43?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBmYWNlJTIwY3JlYW0lMjBqYXIlMjBkYXJrJTIwYmFja2dyb3VuZHxlbnwxfHx8fDE3NjQ1NjY0ODZ8MA&ixlib=rb-4.1.0&q=80&w=600",
     tag: "贵妇级",
     selectionReason: "用完一瓶，皮肤细腻度和光泽度提升肉眼可见。虽然贵，但效果对得起价格。",
@@ -272,7 +284,7 @@ const products = [
     title: "藏红花 · 特级头茬",
     subtitle: "来自雪域高原的红色金子",
     price: "¥199",
-    category: "保健",
+    category: "私密养护",
     image: "https://images.unsplash.com/photo-1656568866961-03e9dcc0fbc6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzYWZmcm9uJTIwdGhyZWFkcyUyMG1hY3JvJTIwcmVkfGVufDF8fHx8MTc2NDU2NjQ4Nnww&ixlib=rb-4.1.0&q=80&w=600",
     tag: "滋补",
     selectionReason: "气色不好的时候，泡几根藏红花，坚持一段时间，脸色红润很多。送闺蜜也很贴心。",
@@ -309,7 +321,7 @@ const products = [
     title: "纯银 · 手工锤纹茶杯",
     subtitle: "银光流转间的茶香",
     price: "¥880",
-    category: "茶器",
+    category: "茗茶雅道",
     image: "https://images.unsplash.com/photo-1701933810995-3331d9ff463b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxoYW1tZXJlZCUyMHNpbHZlciUyMGN1cCUyMHRlYXxlbnwxfHx8fDE3NjQ1NjY0ODZ8MA&ixlib=rb-4.1.0&q=80&w=600",
     tag: "匠心",
     selectionReason: "银杯喝茶，口感真的很不一样，水会变得很软。锤纹在灯光下特别好看，爱不释手。",
@@ -343,10 +355,29 @@ const products = [
   }
 ];
 
-export function StoreView() {
+interface StoreViewProps {
+  initialGiftConcierge?: boolean;
+  initialProductId?: number;
+}
+
+export function StoreView({ initialGiftConcierge = false, initialProductId }: StoreViewProps) {
   const [activeCategory, setActiveCategory] = useState("全部");
   const [showGiftConcierge, setShowGiftConcierge] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState<any>(null);
+  const [selectedProduct, setSelectedProduct] = useState<any>(
+    initialProductId ? products.find((product) => product.id === initialProductId) ?? null : null
+  );
+
+  useEffect(() => {
+    if (initialGiftConcierge) {
+      setShowGiftConcierge(true);
+    }
+  }, [initialGiftConcierge]);
+
+  useEffect(() => {
+    if (initialProductId) {
+      setSelectedProduct(products.find((product) => product.id === initialProductId) ?? null);
+    }
+  }, [initialProductId]);
 
   const greeting = (() => {
     const hour = new Date().getHours();
@@ -388,8 +419,8 @@ export function StoreView() {
           >
             <span className="text-[10px] text-stone-400 mb-1.5 group-hover:text-amber-800/70 transition-colors font-serif">送礼没灵感？</span>
             <div className="flex items-center space-x-2 bg-stone-900 text-stone-50 px-3.5 py-2 rounded-full text-xs shadow-sm group-hover:bg-stone-800 transition-all group-hover:shadow-md">
-              <Gift size={13} />
-              <span>找品货官</span>
+              <Sparkles size={13} />
+              <span>AI 礼物管家</span>
             </div>
           </button>
         </div>
@@ -521,6 +552,18 @@ export function StoreView() {
           </motion.div>
         ))}
       </div>
+
+      {activeCategory !== "全部" && filteredProducts.length === 0 && (
+        <div className="mx-6 rounded-2xl border border-stone-100 bg-white p-6 text-center shadow-sm">
+          <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-amber-50 text-amber-700">
+            <Gift size={18} />
+          </div>
+          <h3 className="font-serif text-base text-stone-900">正在甄选{activeCategory}</h3>
+          <p className="mt-1 text-xs leading-relaxed text-stone-500">
+            该品类会优先补充适合家庭场景和节日礼赠的精品。
+          </p>
+        </div>
+      )}
     </div>
   );
 }
