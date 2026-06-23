@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowRight, Leaf, Tent, Music, Zap, Calendar, MapPin, Sparkles, Armchair, BookOpen, Flower2, CheckCircle2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { StoreProfileView } from './StoreProfileView';
 
 interface OfflineExperienceViewProps {
   onBack: () => void;
@@ -9,6 +10,16 @@ interface OfflineExperienceViewProps {
 
 export function OfflineExperienceView({ onBack }: OfflineExperienceViewProps) {
   const [offlineTab, setOfflineTab] = useState<'events' | 'exclusive' | 'stores'>('exclusive');
+  const [selectedStore, setSelectedStore] = useState<any>(null);
+
+  if (selectedStore) {
+    return (
+      <StoreProfileView
+        store={selectedStore}
+        onBack={() => setSelectedStore(null)}
+      />
+    );
+  }
 
   return (
     <div className="min-h-screen bg-stone-50 pb-24 z-50">
@@ -272,8 +283,9 @@ export function OfflineExperienceView({ onBack }: OfflineExperienceViewProps) {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.1 }}
-                  key={i} 
-                  className="group relative overflow-hidden rounded-2xl bg-white shadow-sm transition-all hover:shadow-md border border-stone-100"
+                  key={i}
+                  onClick={() => setSelectedStore(store)}
+                  className="group relative overflow-hidden rounded-2xl bg-white shadow-sm transition-all hover:shadow-md border border-stone-100 cursor-pointer"
                 >
                   <div className="relative aspect-[16/10] overflow-hidden">
                     <img src={store.image} alt={store.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
@@ -315,8 +327,11 @@ export function OfflineExperienceView({ onBack }: OfflineExperienceViewProps) {
                               </span>
                           ))}
                       </div>
-                      <button 
-                        onClick={() => toast.success("正在导航...")}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toast.success("正在导航...");
+                        }}
                         className="w-10 h-10 flex items-center justify-center rounded-full bg-stone-100 hover:bg-stone-900 text-stone-900 hover:text-white transition-all duration-300 group-hover:scale-110"
                       >
                           <ArrowRight size={18} />
