@@ -6,10 +6,11 @@ import { StoreProfileView } from './StoreProfileView';
 
 interface OfflineExperienceViewProps {
   onBack: () => void;
+  initialTab?: 'events' | 'exclusive' | 'stores';
 }
 
-export function OfflineExperienceView({ onBack }: OfflineExperienceViewProps) {
-  const [offlineTab, setOfflineTab] = useState<'events' | 'exclusive' | 'stores'>('exclusive');
+export function OfflineExperienceView({ onBack, initialTab = 'exclusive' }: OfflineExperienceViewProps) {
+  const [offlineTab, setOfflineTab] = useState<'events' | 'exclusive' | 'stores'>(initialTab);
   const [selectedStore, setSelectedStore] = useState<any>(null);
 
   if (selectedStore) {

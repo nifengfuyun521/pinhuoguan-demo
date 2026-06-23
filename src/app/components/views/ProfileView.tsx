@@ -37,7 +37,6 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 
-import { SocialCapitalView } from './SocialCapitalView';
 import { EnergyView } from './EnergyView';
 import { ConsultationView } from './ConsultationView';
 import { FavoritesView } from './FavoritesView';
@@ -48,20 +47,6 @@ import { CoCreationContentView } from './CoCreationContentView';
 import { OrderListView } from './OrderListView';
 import { TastingOfficerView } from './TastingOfficerView';
 import { MyContentView } from './MyContentView';
-
-const Badge3D = ({ image, label }: { image: string; label: string }) => (
-  <div className="flex flex-col items-center space-y-1 group cursor-pointer">
-    <div className="relative w-10 h-10">
-      <div className="w-full h-full">
-        <div className="absolute inset-0 rounded-full border border-amber-200/30 shadow-[0_0_10px_rgba(251,191,36,0.2)] bg-stone-800 overflow-hidden flex items-center justify-center">
-          <img src={image} alt={label} className="w-full h-full object-cover opacity-90" />
-          <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent opacity-30"></div>
-        </div>
-      </div>
-    </div>
-    <span className="text-[9px] text-stone-500 group-hover:text-amber-600 transition-colors font-serif">{label}</span>
-  </div>
-);
 
 function SectionHeader({
   eyebrow,
@@ -184,17 +169,19 @@ function WorkspaceCard({
   title: string;
   status: string;
   badge?: string;
-  tone?: 'default' | 'warm' | 'dark';
+  tone?: 'default' | 'warm' | 'dark' | 'soft';
   onClick: () => void;
 }) {
   const bgClass =
     tone === 'dark'
       ? 'bg-stone-900 text-stone-50'
+      : tone === 'soft'
+      ? 'bg-gradient-to-br from-amber-50 via-stone-100 to-stone-50 border-amber-100'
       : tone === 'warm'
       ? 'bg-gradient-to-br from-amber-50 to-white border-amber-100'
       : 'bg-white';
   const iconBgClass =
-    tone === 'dark' ? 'bg-white/10 text-amber-300' : 'bg-amber-50 text-amber-700';
+    tone === 'dark' ? 'bg-white/10 text-amber-300' : tone === 'soft' ? 'bg-white/70 text-amber-700 border border-amber-100' : 'bg-amber-50 text-amber-700';
 
   return (
     <button
@@ -250,9 +237,9 @@ function PlaceholderEntry({
 
 function IdentityCodeOverlay({ onClose }: { onClose: () => void }) {
   return (
-    <div className="absolute inset-0 z-[80] bg-stone-950/50 backdrop-blur-sm flex items-end">
-      <div className="w-full rounded-t-[2rem] bg-stone-50 p-6 shadow-2xl">
-        <div className="flex items-center justify-between mb-6">
+    <div className="fixed inset-0 z-[90] bg-stone-950/50 backdrop-blur-sm flex justify-center">
+      <div className="relative h-[100dvh] w-full max-w-md bg-stone-50 p-5 shadow-2xl overflow-hidden">
+        <div className="flex items-center justify-between mb-4">
           <div>
             <div className="text-[10px] tracking-[0.2em] text-amber-700">会员身份码</div>
             <h3 className="mt-1 text-xl font-serif text-stone-900">Lawren 的一通卡</h3>
@@ -262,8 +249,8 @@ function IdentityCodeOverlay({ onClose }: { onClose: () => void }) {
           </button>
         </div>
 
-        <div className="rounded-3xl bg-white p-5 shadow-sm border border-stone-100">
-          <div className="flex items-center justify-between mb-4">
+        <div className="rounded-3xl bg-white p-4 shadow-sm border border-stone-100">
+          <div className="flex items-center justify-between mb-3">
             <div>
               <div className="text-sm font-medium text-stone-900">年度会员 / 高级品鉴官</div>
               <div className="text-[11px] text-stone-400 mt-1">ID 88001 · 动态码 01:58 后刷新</div>
@@ -273,7 +260,7 @@ function IdentityCodeOverlay({ onClose }: { onClose: () => void }) {
             </div>
           </div>
 
-          <div className="mx-auto my-5 w-52 h-52 rounded-3xl bg-stone-900 p-4 shadow-inner">
+          <div className="mx-auto my-4 w-44 h-44 rounded-3xl bg-stone-900 p-3.5 shadow-inner">
             <div className="grid grid-cols-7 gap-1 h-full">
               {Array.from({ length: 49 }).map((_, index) => {
                 const active = [0, 1, 2, 7, 14, 35, 42, 43, 44, 4, 10, 12, 16, 18, 20, 22, 24, 29, 31, 33, 37, 39, 46, 48].includes(index);
@@ -287,16 +274,16 @@ function IdentityCodeOverlay({ onClose }: { onClose: () => void }) {
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-2 mb-4">
-            <div className="rounded-xl bg-stone-50 p-3 text-center">
+          <div className="grid grid-cols-3 gap-2 mb-3">
+            <div className="rounded-xl bg-stone-50 p-2.5 text-center">
               <div className="text-[10px] text-stone-400">可用权益</div>
               <div className="mt-1 text-sm font-serif text-stone-900">3 项</div>
             </div>
-            <div className="rounded-xl bg-stone-50 p-3 text-center">
+            <div className="rounded-xl bg-stone-50 p-2.5 text-center">
               <div className="text-[10px] text-stone-400">家庭成员</div>
               <div className="mt-1 text-sm font-serif text-stone-900">2 位</div>
             </div>
-            <div className="rounded-xl bg-amber-50 p-3 text-center border border-amber-100">
+            <div className="rounded-xl bg-amber-50 p-2.5 text-center border border-amber-100">
               <div className="text-[10px] text-amber-600">即将到期</div>
               <div className="mt-1 text-sm font-serif text-amber-800">1 项</div>
             </div>
@@ -305,27 +292,27 @@ function IdentityCodeOverlay({ onClose }: { onClose: () => void }) {
           <div className="flex gap-2">
             <button
               onClick={() => toast.success('身份码已刷新')}
-              className="flex-1 rounded-xl bg-stone-900 px-4 py-3 text-sm font-medium text-stone-50 flex items-center justify-center space-x-2"
+              className="flex-1 rounded-xl bg-stone-900 px-4 py-2.5 text-sm font-medium text-stone-50 flex items-center justify-center space-x-2"
             >
               <RefreshCw size={15} />
               <span>刷新</span>
             </button>
             <button
               onClick={() => toast.success('会员 ID 已复制')}
-              className="flex-1 rounded-xl border border-stone-200 bg-white px-4 py-3 text-sm font-medium text-stone-700"
+              className="flex-1 rounded-xl border border-stone-200 bg-white px-4 py-2.5 text-sm font-medium text-stone-700"
             >
               复制 ID
             </button>
           </div>
         </div>
 
-        <div className="mt-4 rounded-2xl bg-amber-50/80 border border-amber-100 p-4">
+        <div className="mt-3 rounded-2xl bg-amber-50/80 border border-amber-100 p-3">
           <div className="flex items-start space-x-3">
             <ShieldCheck size={18} className="text-amber-700 mt-0.5" />
             <div>
-              <div className="text-sm font-medium text-stone-900">适用于线下核销、活动验真和会员识别</div>
+              <div className="text-sm font-medium text-stone-900">仅展示核销所需信息</div>
               <div className="mt-1 text-[11px] leading-relaxed text-stone-500">
-                商家扫码后仅可看到核销所需信息，家庭共享与消费隐私仍按你的授权范围展示。
+                商家扫码用于线下核销、活动验真和会员识别，不展示家庭共享与消费隐私。
               </div>
             </div>
           </div>
@@ -420,9 +407,9 @@ function BenefitsCenterOverlay({ onClose, onUseCode }: { onClose: () => void; on
 
 type SortableModuleKey = 'life' | 'family' | 'workbench' | 'settings';
 
-const MODULE_ORDER_KEY = 'phg_profile_module_order';
+const MODULE_ORDER_KEY = 'phg_profile_module_order_v2';
 
-const defaultModuleOrder: SortableModuleKey[] = ['life', 'family', 'workbench', 'settings'];
+const defaultModuleOrder: SortableModuleKey[] = ['workbench', 'life', 'family', 'settings'];
 
 const moduleLabels: Record<SortableModuleKey, { eyebrow: string; title: string }> = {
   life: { eyebrow: '生活', title: '我的生活' },
@@ -432,7 +419,6 @@ const moduleLabels: Record<SortableModuleKey, { eyebrow: string; title: string }
 };
 
 export function ProfileView() {
-  const [showSocialCapital, setShowSocialCapital] = React.useState(false);
   const [showEnergy, setShowEnergy] = React.useState(false);
   const [showConsultations, setShowConsultations] = React.useState(false);
   const [showFavorites, setShowFavorites] = React.useState(false);
@@ -442,6 +428,7 @@ export function ProfileView() {
   const [showCoCreationContent, setShowCoCreationContent] = React.useState(false);
   const [showOrders, setShowOrders] = React.useState(false);
   const [showTastingOfficer, setShowTastingOfficer] = React.useState(false);
+  const [tastingOfficerInitialView, setTastingOfficerInitialView] = React.useState<'workbench' | 'growth'>('workbench');
   const [showMyContent, setShowMyContent] = React.useState(false);
   const [showIdentityCode, setShowIdentityCode] = React.useState(false);
   const [showBenefitsCenter, setShowBenefitsCenter] = React.useState(false);
@@ -483,7 +470,7 @@ export function ProfileView() {
     toast.success(
       <div className="flex flex-col">
         <span className="font-serif font-medium">价值海报已生成</span>
-        <span className="text-xs text-stone-500">包含您的身份徽章与品货主张，可保存分享</span>
+        <span className="text-xs text-stone-500">包含您的会员身份与品货主张，可保存分享</span>
       </div>
     );
   };
@@ -498,10 +485,16 @@ export function ProfileView() {
     setShowBenefitsCenter(true);
   };
 
-  if (showSocialCapital) return <SocialCapitalView onBack={() => setShowSocialCapital(false)} />;
   if (showCoCreationContent) return <CoCreationContentView onBack={() => setShowCoCreationContent(false)} />;
   if (showOrders) return <OrderListView onBack={() => setShowOrders(false)} />;
-  if (showTastingOfficer) return <TastingOfficerView onBack={() => setShowTastingOfficer(false)} />;
+  if (showTastingOfficer) {
+    return (
+      <TastingOfficerView
+        initialView={tastingOfficerInitialView}
+        onBack={() => setShowTastingOfficer(false)}
+      />
+    );
+  }
   if (showMyContent) return <MyContentView onBack={() => setShowMyContent(false)} />;
   if (showEnergy) {
     return (
@@ -632,10 +625,13 @@ export function ProfileView() {
               <WorkspaceCard
                 icon={Star}
                 title="品鉴工作台"
-                status="2个品鉴任务待反馈，1篇手记审核中"
+                status="试用、反馈、内容、选品与审核进度"
                 badge="高级品鉴官"
-                tone="dark"
-                onClick={() => setShowTastingOfficer(true)}
+                tone="soft"
+                onClick={() => {
+                  setTastingOfficerInitialView('workbench');
+                  setShowTastingOfficer(true);
+                }}
               />
               <div className="grid grid-cols-2 gap-3">
                 <WorkspaceCard
@@ -755,7 +751,10 @@ export function ProfileView() {
                   <div className="flex items-center space-x-3">
                     <h2 className="text-xl font-serif text-stone-900">Lawren</h2>
                     <div
-                      onClick={() => setShowTastingOfficer(true)}
+                      onClick={() => {
+                        setTastingOfficerInitialView('growth');
+                        setShowTastingOfficer(true);
+                      }}
                       className="px-[10px] py-[4px] bg-stone-900 rounded-full flex items-center space-x-1 shadow-sm border border-stone-800 cursor-pointer hover:bg-stone-800 transition-colors"
                     >
                       <ShieldCheck size={10} className="text-amber-300" />
@@ -770,65 +769,93 @@ export function ProfileView() {
                 </div>
               </div>
 
-              <div className="rounded-xl bg-stone-50 p-4 mb-4">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] tracking-wider text-stone-400">生态贡献值</span>
+              <div className="relative overflow-hidden rounded-2xl bg-stone-950 p-5 mb-4 text-stone-50 shadow-xl border border-stone-800">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(245,158,11,0.25),transparent_38%),linear-gradient(135deg,rgba(255,255,255,0.08),transparent_42%)]"></div>
+                <div className="relative z-10">
+                  <div className="flex items-start justify-between mb-6">
+                    <div>
+                      <div className="text-[10px] tracking-[0.24em] text-amber-200/80">PINHUOGUAN BLACK</div>
+                      <div className="mt-2 text-2xl font-serif text-amber-50">年度尊享会员</div>
+                    </div>
+                    <div className="rounded-full border border-amber-300/30 bg-amber-300/10 px-3 py-1 text-[10px] text-amber-100">
+                      No. 88001
+                    </div>
+                  </div>
+
+                  <div className="mb-5 grid grid-cols-3 gap-2">
+                    <div>
+                      <div className="text-[10px] text-stone-400">有效期</div>
+                      <div className="mt-1 text-xs text-stone-100">2026.12.01</div>
+                    </div>
+                    <div>
+                      <div className="text-[10px] text-stone-400">专属管家</div>
+                      <div className="mt-1 text-xs text-stone-100">Eva</div>
+                    </div>
+                    <div>
+                      <div className="text-[10px] text-stone-400">权益余额</div>
+                      <div className="mt-1 text-xs text-amber-100">3 项可用</div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-2 mb-4">
+                    <div className="rounded-xl bg-white/10 p-2.5 text-center">
+                      <div className="text-[10px] text-stone-400">线下权益</div>
+                      <div className="mt-1 text-sm font-serif text-amber-50">2 家</div>
+                    </div>
+                    <div className="rounded-xl bg-white/10 p-2.5 text-center">
+                      <div className="text-[10px] text-stone-400">专属服务</div>
+                      <div className="mt-1 text-sm font-serif text-amber-50">1 次</div>
+                    </div>
+                    <div className="rounded-xl bg-amber-300/10 p-2.5 text-center border border-amber-300/20">
+                      <div className="text-[10px] text-amber-200">即将到期</div>
+                      <div className="mt-1 text-sm font-serif text-amber-50">3 天</div>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-2">
+                    <button
+                      onClick={handleIdentityCode}
+                      className="flex-1 rounded-xl bg-amber-100 px-4 py-3 text-sm font-medium text-stone-950 transition-colors hover:bg-amber-50 flex items-center justify-center space-x-2"
+                    >
+                      <Zap size={16} />
+                      <span>出示身份码</span>
+                    </button>
+                    <button
+                      onClick={handleRightsHint}
+                      className="flex-1 rounded-xl border border-white/15 bg-white/10 px-4 py-3 text-sm font-medium text-stone-50 transition-colors hover:bg-white/15 flex items-center justify-center space-x-2"
+                    >
+                      <Ticket size={16} />
+                      <span>我的权益</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-stone-200 bg-stone-50 p-4 mb-5">
+                <div className="flex items-center justify-between mb-3">
+                  <div>
+                    <div className="text-[10px] tracking-[0.18em] text-stone-400">生态贡献值</div>
+                    <div className="mt-1 text-sm text-stone-600">身份成长状态</div>
+                  </div>
                   <button
-                    onClick={() => setShowSocialCapital(true)}
+                    onClick={() => {
+                      setTastingOfficerInitialView('growth');
+                      setShowTastingOfficer(true);
+                    }}
                     className="text-[10px] text-amber-700 flex items-center"
                   >
-                    查看成长路径 <ChevronRight size={12} />
+                    成长路径 <ChevronRight size={12} />
                   </button>
                 </div>
                 <div className="flex items-end justify-between mb-2">
                   <div className="text-2xl font-serif text-stone-900">842</div>
-                  <div className="text-xs text-stone-400">距下一等级还差 158</div>
+                  <div className="text-[10px] text-stone-400">距下一等级还差 158</div>
                 </div>
-                <div className="w-full h-2 bg-stone-200 rounded-full overflow-hidden">
-                  <div className="h-full bg-gradient-to-r from-amber-400 to-amber-600 rounded-full" style={{ width: '84%' }}></div>
+                <div className="w-full h-1.5 bg-stone-200 rounded-full overflow-hidden">
+                  <div className="h-full bg-gradient-to-r from-amber-300 to-amber-600 rounded-full" style={{ width: '84%' }}></div>
                 </div>
               </div>
 
-              <div className="flex gap-2 mb-5">
-                <button
-                  onClick={handleIdentityCode}
-                  className="flex-1 rounded-xl bg-stone-900 px-4 py-3 text-sm font-medium text-stone-50 transition-colors hover:bg-stone-800 flex items-center justify-center space-x-2"
-                >
-                  <Zap size={16} />
-                  <span>出示身份码</span>
-                </button>
-                <button
-                  onClick={handleRightsHint}
-                  className="flex-1 rounded-xl border border-stone-200 bg-white px-4 py-3 text-sm font-medium text-stone-700 transition-colors hover:bg-stone-50 flex items-center justify-center space-x-2"
-                >
-                  <Ticket size={16} />
-                  <span>我的权益</span>
-                </button>
-              </div>
-
-              <div className="border-t border-dashed border-stone-100 pt-4">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="flex items-center text-[10px] uppercase tracking-widest text-stone-400">
-                    <Award size={10} className="mr-1" />
-                    身份徽章
-                  </span>
-                  <span className="text-[10px] text-stone-300">3/12</span>
-                </div>
-                <div className="flex items-center space-x-6 px-2 overflow-x-auto scrollbar-hide">
-                  <Badge3D
-                    label="汝窑共建"
-                    image="https://images.unsplash.com/photo-1622258699373-89e5c8437b4e?q=80&w=200&auto=format&fit=crop"
-                  />
-                  <Badge3D
-                    label="山村守护"
-                    image="https://images.unsplash.com/photo-1651391647095-2cea9fe0970d?q=80&w=200&auto=format&fit=crop"
-                  />
-                  <Badge3D
-                    label="意见领袖"
-                    image="https://images.unsplash.com/photo-1651902217786-a0169b02078f?q=80&w=200&auto=format&fit=crop"
-                  />
-                </div>
-              </div>
             </div>
           </div>
         </section>
