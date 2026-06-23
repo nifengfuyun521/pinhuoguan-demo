@@ -418,129 +418,37 @@ export function ProfileView() {
       <div className="px-6 mt-6 space-y-8">
         <section>
           <SectionHeader
-            eyebrow="Identity"
-            title="身份码与会员身份"
-            desc="先明确我是谁、怎么出示身份、基础权益有哪些。"
-          />
-          <div className="grid grid-cols-2 gap-3">
-            <QuickEntry icon={QrCode} label="身份码" value="到店核销、活动验真、会员识别" onClick={handleIdentityCode} />
-            <QuickEntry icon={ShieldCheck} label="会员身份" value="年度会员有效中，含线下权益与家庭协同" onClick={handleRightsHint} />
-          </div>
-
-          <div className="mt-3 rounded-2xl bg-stone-900 p-5 text-stone-50 shadow-md">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <div className="flex items-center space-x-2">
-                  <WalletCards size={14} className="text-amber-300" />
-                  <span className="text-[10px] uppercase tracking-[0.22em] text-amber-100/80">Membership Card</span>
-                </div>
-                <h4 className="mt-3 text-lg font-serif text-amber-50">品货官一通卡</h4>
-                <p className="mt-1 text-[11px] leading-relaxed text-stone-300">
-                  线上订单、到店核销、活动通行与家庭共享围绕同一身份识别，不需要在不同场景重复确认。
-                </p>
-              </div>
-              <button
-                onClick={handleIdentityCode}
-                className="rounded-full border border-white/10 bg-white/10 px-3 py-2 text-[11px] text-amber-100 transition-colors hover:bg-white/15"
-              >
-                立即出示
-              </button>
-            </div>
-          </div>
-        </section>
-
-        <section>
-          <SectionHeader
-            eyebrow="Assets"
-            title="我的生活资产"
-            desc="把已发生、正在进行和可继续跟进的生活记录聚在一起。"
-          />
-          <div className="grid grid-cols-2 gap-3">
-            <QuickEntry icon={ShoppingBag} label="订单与售后" value="3个进行中，1个待评价" onClick={() => setShowOrders(true)} />
-            <QuickEntry icon={Heart} label="收藏与清单" value="12件好物，2份送礼灵感" onClick={() => setShowFavorites(true)} />
-          </div>
-
-          <div className="mt-3 space-y-3">
-            <ListItem icon={CreditCard} label="咨询记录" desc="2个进行中，继续跟进需求" onClick={() => setShowConsultations(true)} />
-            <PlaceholderEntry
-              icon={Gift}
-              label="活动记录"
-              desc="冬至茶会待出示，1场已报名"
-              title="活动记录"
-              detail="你已报名 1 场线下活动，后续可在这里查看通行码、同行人和转赠状态。"
-            />
-            <ListItem icon={Zap} label="节省记录" desc="本月累计回流 680，查看能量与兑换" onClick={() => setShowEnergy(true)} />
-          </div>
-        </section>
-
-        <section>
-          <SectionHeader
-            eyebrow="Family"
-            title="家庭账户"
-            desc="家庭成员、采购协同、共享权益和授权边界都从这里进入。"
-          />
-          <div className="rounded-2xl border border-stone-200 bg-white p-5 shadow-sm">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <div className="flex items-center space-x-2">
-                  <Users size={14} className="text-stone-700" />
-                  <span className="text-[10px] uppercase tracking-[0.22em] text-stone-400">Family Account</span>
-                </div>
-                <h4 className="mt-3 text-lg font-serif text-stone-900">让家人一起用卡，也保留边界</h4>
-                <p className="mt-1 text-[11px] leading-relaxed text-stone-500">
-                  支持家庭成员加入、协同采购与共享部分权益，同时保留授权范围、退出路径与隐私边界。
-                </p>
-              </div>
-              <div className="rounded-full border border-amber-100 bg-amber-50 px-3 py-1.5 text-[10px] text-amber-700">
-                2位成员已加入
-              </div>
-            </div>
-
-            <div className="mt-4 space-y-3">
-              <PlaceholderEntry
-                icon={Users}
-                label="家庭成员"
-                desc="查看成员状态与邀请新成员"
-                title="家庭成员"
-                detail="当前已有 2 位家庭成员加入，后续可在这里管理邀请状态、子卡与成员关系。"
-              />
-              <PlaceholderEntry
-                icon={ShoppingBag}
-                label="家庭采购"
-                desc="常购清单、代下单与协同补货"
-                title="家庭采购"
-                detail="家庭常购与补货任务会沉淀在这里，方便伴侣或家人协同完成采购。"
-              />
-              <PlaceholderEntry
-                icon={Ticket}
-                label="家庭权益"
-                desc="共享可用权益与使用记录"
-                title="家庭权益"
-                detail="这里会展示可共享给家人的权益范围、已使用记录与剩余可用次数。"
-              />
-              <PlaceholderEntry
-                icon={Shield}
-                label="共享设置"
-                desc="管理授权范围、隐私边界与退出机制"
-                title="共享设置"
-                detail="家庭共享将支持调整可见范围、撤回授权与退出协同，避免过度暴露个人记录。"
-              />
-            </div>
-          </div>
-        </section>
-
-        <section>
-          <SectionHeader
-            eyebrow="Benefits"
+            eyebrow="权益"
             title="我的权益"
-            desc="把线下权益、即将到期和可使用状态集中呈现，不再散落。"
+            desc="优先看到最该现在处理和马上可以使用的权益。"
           />
           <div className="rounded-2xl bg-gradient-to-br from-white via-stone-50 to-amber-50/70 border border-amber-100 p-5 shadow-sm">
+            <div className="mb-4 rounded-2xl border border-amber-200 bg-amber-50/90 p-4">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <div className="flex items-center space-x-2">
+                    <Clock3 size={14} className="text-amber-700" />
+                    <span className="text-[10px] tracking-[0.18em] text-amber-700">优先处理</span>
+                  </div>
+                  <h4 className="mt-2 text-base font-serif text-stone-900">芳疗体验券将在 3 天后失效</h4>
+                  <p className="mt-1 text-[11px] leading-relaxed text-stone-500">
+                    这张券可用于线下体验服务，建议优先核销，避免权益已获得却没有被真正使用。
+                  </p>
+                </div>
+                <button
+                  onClick={handleIdentityCode}
+                  className="shrink-0 rounded-full border border-amber-200 bg-white px-3 py-2 text-[11px] font-medium text-stone-800 shadow-sm transition-colors hover:bg-white"
+                >
+                  现在去用
+                </button>
+              </div>
+            </div>
+
             <div className="flex items-start justify-between gap-4">
               <div>
                 <div className="flex items-center space-x-2">
                   <Sparkles size={14} className="text-amber-600" />
-                  <span className="text-[10px] uppercase tracking-[0.22em] text-amber-700/80">Benefits Ledger</span>
+                  <span className="text-[10px] tracking-[0.18em] text-amber-700/80">权益总览</span>
                 </div>
                 <h4 className="mt-3 text-lg font-serif text-stone-900">本周有 3 项权益可立即使用</h4>
                 <p className="mt-1 text-[11px] leading-relaxed text-stone-500">
@@ -571,7 +479,6 @@ export function ProfileView() {
             </div>
 
             <div className="mt-4 space-y-3">
-              <ListItem icon={Ticket} label="线下权益" desc="2家特权商户待到店，1张芳疗体验券可用" onClick={handleIdentityCode} />
               <PlaceholderEntry
                 icon={Clock3}
                 label="即将到期"
@@ -579,23 +486,124 @@ export function ProfileView() {
                 title="即将到期权益"
                 detail="即将到期权益会按时间排序提醒，避免遗漏已获得但尚未使用的服务机会。"
               />
+              <ListItem icon={Ticket} label="线下权益" desc="2家特权商户待到店，1张芳疗体验券可用" onClick={handleIdentityCode} />
               <ListItem icon={Gift} label="邀请与赠礼" desc="1张活动席位可转赠好友" onClick={() => setShowInvite(true)} />
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <SectionHeader
+            eyebrow="资产"
+            title="我的生活资产"
+            desc="看我已经发生过什么、还在推进什么。"
+          />
+          <div className="grid grid-cols-2 gap-3">
+            <QuickEntry icon={ShoppingBag} label="订单与售后" value="3个进行中，1个待评价" onClick={() => setShowOrders(true)} />
+            <QuickEntry icon={Heart} label="收藏与清单" value="12件好物，2份送礼灵感" onClick={() => setShowFavorites(true)} />
+          </div>
+
+          <div className="mt-3 space-y-3">
+            <ListItem icon={CreditCard} label="咨询记录" desc="2个进行中，继续跟进需求" onClick={() => setShowConsultations(true)} />
+            <PlaceholderEntry
+              icon={Gift}
+              label="活动记录"
+              desc="冬至茶会待出示，1场已报名"
+              title="活动记录"
+              detail="你已报名 1 场线下活动，后续可在这里查看通行码、同行人和转赠状态。"
+            />
+            <ListItem icon={Zap} label="节省记录" desc="本月累计回流 680，查看能量与兑换" onClick={() => setShowEnergy(true)} />
+          </div>
+        </section>
+
+        <section>
+          <SectionHeader
+            eyebrow="家庭"
+            title="家庭账户"
+            desc="先看到当前协同状态，再进入成员、采购和共享设置。"
+          />
+          <div className="rounded-2xl border border-stone-200 bg-white p-5 shadow-sm">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <div className="flex items-center space-x-2">
+                  <Users size={14} className="text-stone-700" />
+                  <span className="text-[10px] tracking-[0.18em] text-stone-400">家庭协同</span>
+                </div>
+                <h4 className="mt-3 text-lg font-serif text-stone-900">家人可以一起使用，也各自保留边界</h4>
+                <p className="mt-1 text-[11px] leading-relaxed text-stone-500">
+                  家庭账户支持共享必要权益和采购协同，但家庭成员的可见范围、授权和退出路径都应清楚可控。
+                </p>
+              </div>
+              <div className="rounded-full border border-amber-100 bg-amber-50 px-3 py-1.5 text-[10px] text-amber-700">
+                家庭运行中
+              </div>
+            </div>
+
+            <div className="mt-4 grid grid-cols-3 gap-2">
+              <StatusTile label="成员状态" value="1位待确认" tone="warm" />
+              <StatusTile label="本周采购" value="2 单协同中" />
+              <StatusTile label="权益共享" value="已使用 1 次" />
+            </div>
+
+            <div className="mt-4 space-y-3">
+              <PlaceholderEntry
+                icon={Users}
+                label="家庭成员"
+                desc="2位已加入，1位待接受邀请"
+                title="家庭成员"
+                detail="当前已有 2 位家庭成员加入，1 位待确认，后续可在这里管理邀请状态、子卡与成员关系。"
+              />
+              <PlaceholderEntry
+                icon={ShoppingBag}
+                label="家庭采购"
+                desc="本周 2 单待协同，常购清单已生成"
+                title="家庭采购"
+                detail="家庭常购与补货任务会沉淀在这里，方便伴侣或家人协同完成采购。"
+              />
+              <PlaceholderEntry
+                icon={Ticket}
+                label="家庭权益"
+                desc="1项共享中，查看使用记录与剩余次数"
+                title="家庭权益"
+                detail="这里会展示可共享给家人的权益范围、已使用记录与剩余可用次数。"
+              />
+              <PlaceholderEntry
+                icon={Shield}
+                label="共享设置"
+                desc="调整授权范围、隐私边界与退出机制"
+                title="共享设置"
+                detail="家庭共享将支持调整可见范围、撤回授权与退出协同，避免过度暴露个人记录。"
+              />
             </div>
           </div>
         </section>
 
         <section className="pb-2">
           <SectionHeader
-            eyebrow="Workbench"
+            eyebrow="工作台"
             title="角色工作台"
-            desc="保留高阶能力，但不挤占消费者基础体验。"
+            desc="只保留当前最相关的能力入口和待办，不再把它做成第二个首页。"
           />
           <div className="space-y-3">
             <ListItem icon={Star} label="品鉴官成长" desc="查看等级进度、特权与待完成事项" onClick={() => setShowTastingOfficer(true)} />
             <ListItem icon={BookOpenText} label="内容共建" desc="4篇已发布，继续沉淀你的品味档案" onClick={() => setShowCoCreationContent(true)} />
             <ListItem icon={Award} label="共建者申请" desc="资格已达标，进入下一阶段审核" onClick={() => setShowCoBuilderApply(true)} />
             <ListItem icon={User} label="专属客服" desc="Eva 正在跟进你的服务与权益使用" onClick={() => setShowService(true)} />
-            <ListItem icon={Zap} label="生态贡献值" desc="842 分，距下一等级还差 158" onClick={() => setShowSocialCapital(true)} />
+            <button
+              onClick={() => setShowSocialCapital(true)}
+              className="flex w-full items-center justify-between rounded-xl border border-dashed border-stone-200 bg-stone-50/80 p-4 text-left transition-colors hover:bg-stone-50"
+            >
+              <div className="flex items-center space-x-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-amber-600 shadow-sm">
+                  <CheckCircle2 size={18} />
+                </div>
+                <div>
+                  <div className="text-sm font-medium text-stone-900">生态贡献值稳定增长中</div>
+                  <div className="mt-0.5 text-[11px] text-stone-400">842 分，距下一等级还差 158，优先看成长进度而不是收益刺激</div>
+                </div>
+              </div>
+              <ChevronRight size={16} className="text-stone-300" />
+            </button>
           </div>
         </section>
       </div>

@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { MessageSquare, Heart, ThumbsUp, User, Sparkles, Plus, Clock, Share2, BookOpen, ShieldCheck, Users, Target, ArrowRight, Leaf, Award, BookMarked, Camera, Star, ChevronRight, MapPin } from 'lucide-react';
+import { MessageSquare, Heart, ThumbsUp, User, Sparkles, Plus, Clock, Share2, BookOpen, ShieldCheck, Users, Target, ArrowRight, Leaf, Award, BookMarked, Camera, Star, ChevronRight, MapPin, Search } from 'lucide-react';
 import { toast } from 'sonner';
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { MasterNoteDetail } from './MasterNoteDetail';
 import { MasterProfileView } from './MasterProfileView';
+import { ReviewNoteDetail } from './ReviewNoteDetail';
 
 const mastersData: Record<string, {
   id: string;
@@ -158,6 +159,125 @@ const masterNotes = [
   }
 ];
 
+const connoisseursData: Record<string, {
+  id: string;
+  name: string;
+  title: string;
+  avatar: string;
+  cover: string;
+  level: string;
+  verified: boolean;
+  bio: string;
+  specialties: string[];
+  reviewsCount: number;
+  followersCount: number;
+  isFollowed: boolean;
+}> = {
+  chawu: {
+    id: 'chawu',
+    name: '茶悟先生',
+    title: '资深茶器品鉴师',
+    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=60',
+    cover: 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
+    level: '首席品鉴官',
+    verified: true,
+    bio: '茶器二十年，上手过的茶器比见过的人还多。从不迷信名家，只相信自己的手和舌头。',
+    specialties: ['紫砂', '青瓷', '汝窑', '茶席美学'],
+    reviewsCount: 86,
+    followersCount: 5680,
+    isFollowed: false
+  },
+  mianshi: {
+    id: 'mianshi',
+    name: '面食研究所',
+    title: '烘焙美食博主',
+    avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&auto=format&fit=crop&q=60',
+    cover: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
+    level: '认证品鉴官',
+    verified: true,
+    bio: '吃遍全球 300+ 家面包店，用体重换经验。好面包会说话，前提是你得会听。',
+    specialties: ['酸种面包', '可颂', '甜点', '咖啡搭配'],
+    reviewsCount: 124,
+    followersCount: 12300,
+    isFollowed: true
+  }
+};
+
+const reviewNotes = [
+  {
+    id: 101,
+    title: '实测清山茶事「云隐」汝窑壶：680元值不值？',
+    cover: 'https://images.unsplash.com/photo-1563822249548-9a72b6353cd1?w=800&auto=format&fit=crop&q=60',
+    excerpt: '上手用了整整一个月，从泥料、釉色、出水、手感四个维度，说说这把壶到底值不值得入手。',
+    connoisseur: connoisseursData.chawu,
+    product: {
+      name: '云隐 · 手工汝窑茶壶',
+      brand: '清山茶事',
+      price: 680,
+      image: 'https://images.unsplash.com/photo-1563822249548-9a72b6353cd1?w=400&auto=format&fit=crop&q=60'
+    },
+    overallScore: 8.5,
+    dimensions: [
+      { name: '泥料质地', score: 8.5, label: '天青釉色温润，开片自然' },
+      { name: '工艺水准', score: 9.0, label: '手工拉坯，器型周正' },
+      { name: '使用体验', score: 8.0, label: '出水流畅，断水利落' },
+      { name: '性价比', score: 8.5, label: '同价位品质领先' }
+    ],
+    pros: [
+      '釉色温润，开片细腻',
+      '出水流畅，手感舒适',
+      '价格亲民，入门首选'
+    ],
+    cons: [
+      '容量略小，适合独饮',
+      '壶盖缝隙稍大'
+    ],
+    conclusion: '作为入门级手工汝窑壶，云隐的表现超出预期。680元的价格能买到这个品质的手拉坯汝窑，性价比相当不错。适合刚开始接触茶器、想拥有一把真正手工壶的朋友。',
+    content: '拿到这把壶的时候，第一感觉是"轻"。不是那种偷工减料的轻，是胎壁薄得恰到好处的轻。天青釉色在阳光下会泛出一点淡粉，这是汝窑最迷人的地方。\n\n说泥料。这个价位的汝窑，很多是注浆坯，但这把确实是手拉的——看壶嘴和壶身的连接处，有明显的手工接痕，不完美，但这就是手工的温度。釉面的开片是自然形成的，养了一个月，已经开始出现淡淡的金丝铁线纹路。\n\n说出水。这是我最在意的一点。很多壶长得好看，但出水歪歪扭扭。云隐的出水很稳，柱状出水，收水的时候也不会流口水。壶把的设计很贴手，泡一下午茶，手腕不酸。\n\n唯一的小遗憾是容量，150ml左右，适合一个人喝。两个人的话就有点不够用了。不过独饮的时候，这个大小正合适。',
+    likes: 456,
+    comments: 78,
+    liked: false,
+    date: '2天前',
+    usefulCount: 312
+  },
+  {
+    id: 102,
+    title: '魔都酸种面包测评Top5：麦乡能排第几？',
+    cover: 'https://images.unsplash.com/photo-1586444248902-2f64eddc13df?w=800&auto=format&fit=crop&q=60',
+    excerpt: '跑遍上海 27 家酸种面包店，从酸香度、咀嚼感、外壳脆度、内部组织四个维度，给你一份真实测评。',
+    connoisseur: connoisseursData.mianshi,
+    product: {
+      name: '经典乡村酸种面包',
+      brand: '麦乡面包坊',
+      price: 58,
+      image: 'https://images.unsplash.com/photo-1586444248902-2f64eddc13df?w=400&auto=format&fit=crop&q=60'
+    },
+    overallScore: 9.2,
+    dimensions: [
+      { name: '酸香度', score: 9.0, label: '自然发酵的果香与麦香平衡' },
+      { name: '外壳脆度', score: 9.5, label: '外壳焦脆，切开有咔嚓声' },
+      { name: '内部组织', score: 9.0, label: '气孔均匀，蜂窝状组织漂亮' },
+      { name: '咀嚼感', score: 9.5, label: '有嚼劲但不费牙' }
+    ],
+    pros: [
+      '发酵风味层次丰富',
+      '外壳酥脆，内里柔软',
+      '用料扎实，无添加'
+    ],
+    cons: [
+      '价格偏高',
+      '需要排队，晚了买不到'
+    ],
+    conclusion: '麦乡的乡村酸种面包是我今年吃到的最好的酸种之一。三天的慢发酵带来的风味复杂度，是那种"吃完一口还想再吃一口"的好吃。58元的价格不便宜，但绝对值。',
+    content: '测评了 27 家店，麦乡的乡村酸种是唯一一家我连续三天都去买的。\n\n先说外壳。好的酸种面包，外壳应该是脆的，但不是硬的。麦乡的外壳厚度刚刚好，大概 2-3 毫米，切开的时候能听到"咔嚓"一声，那是烤得刚好的标志。\n\n再说内部组织。切开的瞬间，你能闻到一股酸酸的、带着点果香的麦香味。气孔大小不一但分布均匀，这是自然发酵的标志，不是用泡打粉发出来的那种均匀的大孔。\n\n最后说口感。第一口咬下去，外壳脆，然后里面是软的、有嚼劲的。嚼着嚼着，麦香味会慢慢出来，还有一点点淡淡的酸，不是那种让人皱眉的酸，是让人胃口大开的酸。\n\n唯一的缺点是贵，而且真的要早去。我上次周末 9 点到，已经排了 20 多个人。',
+    likes: 892,
+    comments: 156,
+    liked: true,
+    date: '5天前',
+    usefulCount: 624
+  }
+];
+
 const knowledgeArticles = [
   {
     id: 3,
@@ -267,8 +387,9 @@ const lifeNotes = [
 ];
 
 export function CommunityView() {
-  const [activeTab, setActiveTab] = useState<'master' | 'knowledge' | 'circles' | 'notes'>('master');
+  const [activeTab, setActiveTab] = useState<'master' | 'review' | 'knowledge' | 'circles' | 'notes'>('master');
   const [selectedNote, setSelectedNote] = useState<typeof masterNotes[0] | null>(null);
+  const [selectedReview, setSelectedReview] = useState<typeof reviewNotes[0] | null>(null);
   const [selectedMaster, setSelectedMaster] = useState<typeof mastersData[keyof typeof mastersData] | null>(null);
   const [previousView, setPreviousView] = useState<'list' | 'note'>('list');
 
@@ -300,6 +421,13 @@ export function CommunityView() {
     }
   };
 
+  const handleReviewClick = (reviewId: number) => {
+    const review = reviewNotes.find(n => n.id === reviewId);
+    if (review) {
+      setSelectedReview(review);
+    }
+  };
+
   if (selectedMaster) {
     const masterNotesForProfile = masterNotes.filter(n => n.master.id === selectedMaster.id);
     return (
@@ -309,6 +437,18 @@ export function CommunityView() {
         onBack={handleBackFromMaster}
         onNoteClick={handleMasterNoteClick}
       />
+    );
+  }
+
+  if (selectedReview) {
+    return (
+      <div className="min-h-screen bg-stone-50">
+        <ReviewNoteDetail
+          note={selectedReview}
+          onBack={() => setSelectedReview(null)}
+          onConnoisseurClick={(id) => toast.info('即将跳转到品鉴官主页')}
+        />
+      </div>
     );
   }
 
@@ -352,6 +492,14 @@ export function CommunityView() {
              }`}
            >
              主理人
+           </button>
+           <button
+             onClick={() => setActiveTab('review')}
+             className={`px-4 py-1.5 rounded-full text-xs font-medium transition-all whitespace-nowrap ${
+               activeTab === 'review' ? 'bg-white shadow-sm text-stone-900' : 'text-stone-500 hover:text-stone-700'
+             }`}
+           >
+             品鉴
            </button>
            <button
              onClick={() => setActiveTab('knowledge')}
@@ -465,6 +613,112 @@ export function CommunityView() {
                           className="text-stone-400 hover:text-stone-900 transition-colors"
                         >
                           <Share2 size={16} />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
+        {/* Review Tab */}
+        {activeTab === 'review' && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+             <div className="mb-6 bg-gradient-to-r from-amber-50 to-stone-50 border border-amber-100 rounded-xl p-4 flex items-center justify-between">
+                <div>
+                   <div className="flex items-center space-x-2 mb-1">
+                      <Award size={14} className="text-amber-700" />
+                      <span className="text-xs font-bold text-stone-900">品鉴官精选测评</span>
+                   </div>
+                   <p className="text-[10px] text-stone-500">真实体验，深度测评，不踩坑</p>
+                </div>
+                <button className="bg-stone-900 text-amber-100 text-[10px] px-3 py-1.5 rounded-full">
+                   全部
+                </button>
+             </div>
+
+             <div className="space-y-6">
+              {reviewNotes.map((note, index) => (
+                <motion.div
+                  key={note.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  onClick={() => handleReviewClick(note.id)}
+                  className="group relative cursor-pointer"
+                >
+                  {/* Connoisseur Header */}
+                  <div className="flex items-center mb-3 px-1">
+                     <div className="w-8 h-8 rounded-full overflow-hidden border border-stone-200 mr-2.5">
+                        <img src={note.connoisseur.avatar} className="w-full h-full object-cover" alt={note.connoisseur.name} />
+                     </div>
+                     <div>
+                        <div className="text-xs font-bold text-stone-900 flex items-center">
+                           {note.connoisseur.name}
+                           {note.connoisseur.verified && <Sparkles size={10} className="ml-1 text-amber-500 fill-amber-500" />}
+                        </div>
+                        <div className="text-[10px] text-stone-400">{note.connoisseur.title}</div>
+                     </div>
+                     <div className="ml-auto">
+                        <span className="text-[10px] px-2 py-0.5 bg-gradient-to-r from-amber-100 to-amber-50 text-amber-700 rounded-full border border-amber-200 flex items-center space-x-1">
+                           <Star size={9} className="fill-amber-500 text-amber-500" />
+                           <span>{note.overallScore}分</span>
+                        </span>
+                     </div>
+                  </div>
+
+                  <div className="bg-white rounded-xl overflow-hidden shadow-sm group-hover:shadow-lg transition-all duration-300 border border-stone-100">
+                    <div className="relative aspect-[16/10] overflow-hidden">
+                      <img
+                        src={note.cover}
+                        alt={note.title}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-90 group-hover:opacity-100"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-stone-900/60 to-transparent opacity-60"></div>
+                      <div className="absolute bottom-3 left-4 right-4">
+                        <h3 className="text-base font-serif text-white leading-snug font-medium">
+                          {note.title}
+                        </h3>
+                      </div>
+                    </div>
+
+                    <div className="p-4 relative -mt-2 bg-white rounded-t-xl mx-2">
+                      {/* Product Info */}
+                      <div className="flex items-center mb-3 pb-3 border-b border-stone-50">
+                         <div className="w-10 h-10 rounded-lg bg-stone-100 overflow-hidden flex-shrink-0">
+                           <img src={note.product.image} className="w-full h-full object-cover" alt="" />
+                         </div>
+                         <div className="ml-2 flex-1 min-w-0">
+                           <p className="text-[11px] text-stone-500 truncate">{note.product.name}</p>
+                           <p className="text-xs font-semibold text-stone-900">¥{note.product.price}</p>
+                         </div>
+                         <div className="text-right">
+                            <div className="flex items-center text-[10px] text-stone-400">
+                               <ThumbsUp size={10} className="mr-1" />
+                               {note.usefulCount} 有用
+                            </div>
+                         </div>
+                      </div>
+
+                      <p className="text-xs text-stone-500 leading-relaxed mb-3 line-clamp-2 font-light">
+                        {note.excerpt}
+                      </p>
+
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center text-stone-400 text-[10px] space-x-4 uppercase tracking-wider">
+                          <div className="flex items-center">
+                            <Heart size={12} className="mr-1.5" />
+                            {note.likes}
+                          </div>
+                          <div className="flex items-center">
+                            <MessageSquare size={12} className="mr-1.5" />
+                            {note.comments}
+                          </div>
+                        </div>
+                        <button className="text-stone-400 hover:text-stone-900 transition-colors">
+                           <Share2 size={16} />
                         </button>
                       </div>
                     </div>
