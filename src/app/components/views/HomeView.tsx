@@ -93,6 +93,7 @@ export function HomeView({ onChangeView }: { onChangeView: (view: string) => voi
   const contributionToNext = userInfo.progress.total - userInfo.progress.current;
 
   return (
+    <>
     <div className="min-h-screen bg-stone-50 pb-28 font-sans text-stone-800">
 
       {/* ═══ 全局悬浮：分享三件套 + 家庭画像 ═══ */}
@@ -746,5 +747,6 @@ export function HomeView({ onChangeView }: { onChangeView: (view: string) => voi
           </div>
         </div>
       )}
+    </>
   );
 }
