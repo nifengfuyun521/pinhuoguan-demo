@@ -82,6 +82,7 @@ export function HomeView({ onChangeView }: { onChangeView: (view: string) => voi
   const [scrolled, setScrolled] = useState(false);
   const [rankTab, setRankTab] = useState<RankTab>('hot');
   const [showIdentityPanel, setShowIdentityPanel] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
@@ -129,10 +130,13 @@ export function HomeView({ onChangeView }: { onChangeView: (view: string) => voi
         >
           {/* 搜索框 */}
           <div className="px-4 pt-4 pb-2">
-            <div className="flex items-center gap-2 rounded-full bg-white px-4 py-2.5 shadow-sm ring-1 ring-stone-200/60">
+            <button
+              onClick={() => setShowSearch(true)}
+              className="flex w-full items-center gap-2 rounded-full bg-white px-4 py-2.5 shadow-sm ring-1 ring-stone-200/60 hover:ring-amber-300 transition-all"
+            >
               <Search size={14} className="text-stone-400 shrink-0" />
               <span className="text-xs text-stone-400">搜索好物 / 商家 / 品鉴官</span>
-            </div>
+            </button>
           </div>
         </div>
 
@@ -154,7 +158,12 @@ export function HomeView({ onChangeView }: { onChangeView: (view: string) => voi
                 </div>
                 <span className="text-[11px] font-medium text-stone-800">{userInfo.level}</span>
               </div>
-              <Search size={16} className="text-stone-400" />
+              <button
+                onClick={(e) => { e.stopPropagation(); setShowSearch(true); }}
+                className="p-1 rounded-full hover:bg-stone-200 transition-colors"
+              >
+                <Search size={16} className="text-stone-400" />
+              </button>
             </div>
           ) : (
             /* 展开态 */
@@ -700,5 +709,42 @@ export function HomeView({ onChangeView }: { onChangeView: (view: string) => voi
         </div>
       </section>
     </div>
+
+      {/* ═══ 搜索浮层 ═══ */}
+      {showSearch && (
+        <div className="fixed inset-0 z-[60] bg-stone-50 flex flex-col animate-in fade-in duration-200">
+          <div className="flex items-center gap-3 px-4 pt-4 pb-3">
+            <div className="flex flex-1 items-center gap-2 rounded-full bg-stone-100 px-4 py-2.5 ring-1 ring-stone-200/60">
+              <Search size={14} className="text-stone-400 shrink-0" />
+              <input
+                autoFocus
+                placeholder="搜索好物、商家、品鉴官…"
+                className="flex-1 bg-transparent text-sm text-stone-800 placeholder-stone-400 outline-none"
+              />
+            </div>
+            <button
+              onClick={() => setShowSearch(false)}
+              className="text-sm text-stone-500 hover:text-stone-800 shrink-0"
+            >
+              取消
+            </button>
+          </div>
+
+          {/* 搜索建议区 */}
+          <div className="flex-1 overflow-auto px-4 pt-4">
+            <p className="text-[10px] font-medium tracking-[0.2em] text-stone-400 mb-3">热门搜索</p>
+            <div className="flex flex-wrap gap-2">
+              {['白松露精华油', '明前龙井', '父亲节礼物', '汝窑', '毛孩子', '养生', '堪舆', '沉香'].map((tag) => (
+                <button
+                  key={tag}
+                  className="rounded-full border border-stone-200 bg-white px-3 py-1.5 text-[11px] text-stone-600 hover:border-amber-300 hover:text-amber-700 transition-colors"
+                >
+                  {tag}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
   );
 }
