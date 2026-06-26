@@ -11,8 +11,8 @@ export function BottomNav({ currentView, onChangeView }: BottomNavProps) {
   const navItems = [
     { id: 'home', label: '首页', icon: Home },
     { id: 'store', label: '品库', icon: ShoppingBag },
-    { id: 'community', label: '圈层', icon: Aperture },
     { id: 'experience', label: '体验', icon: Sparkles },
+    { id: 'community', label: '圈层', icon: Aperture },
     { id: 'profile', label: '我的', icon: User },
   ];
 
